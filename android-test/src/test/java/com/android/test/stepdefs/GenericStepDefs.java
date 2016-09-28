@@ -20,7 +20,7 @@ public class GenericStepDefs {
         apiDemosDriver.checkAll(arg0);
     }
 
-    @Then("^\"([^\"]*)\" should be displayed$")
+    @Then("^'(.*)' should be displayed$")
     public void elementShouldBeDisplayed(String arg0) {
         apiDemosDriver.shouldDisplay(arg0);
     }

@@ -19,12 +19,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <surefire-version>2.18.1</surefire-version>
-        <compiler-version>3.3</compiler-version>
-        <reporting-version>2.8.0</reporting-version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>

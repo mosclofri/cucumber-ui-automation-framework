@@ -40,14 +40,6 @@ public class AppiumServer {
         }
     }
 
-    public void startAppiumServer() {
-        this.service.start();
-    }
-
-    public void stopAppiumServer() {
-        this.service.stop();
-    }
-
     public static URL getUrl() throws MalformedURLException {
         return new URL("http://" + System.getProperty("appium.host") + ":" + System.getProperty("appium.port") + "/wd/hub");
     }
@@ -59,5 +51,13 @@ public class AppiumServer {
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(System.getProperty("no.reset")));
         capabilities.setCapability(MobileCapabilityType.APP, new File(ClassLoader.getSystemResource(System.getProperty("appfile")).getFile()).getAbsolutePath());
         return capabilities;
+    }
+
+    public void startAppiumServer() {
+        this.service.start();
+    }
+
+    public void stopAppiumServer() {
+        this.service.stop();
     }
 }

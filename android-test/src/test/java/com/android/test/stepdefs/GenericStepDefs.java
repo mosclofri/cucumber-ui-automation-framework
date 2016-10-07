@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GenericStepDefs {
 
     @Autowired
-    protected ApiDemosDriver apiDemosDriver;
+    private ApiDemosDriver apiDemosDriver;
 
     @When("^I click on '(.*)'$")
     public void iClickOnElement(String arg0) {

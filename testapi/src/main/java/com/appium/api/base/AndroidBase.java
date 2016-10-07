@@ -1,4 +1,4 @@
-package com.appium.api.driver;
+package com.appium.api.base;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -9,6 +9,7 @@ public class AndroidBase extends AbstractBase {
         super(driver);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AndroidDriver<? extends MobileElement> getDriver() {
         return (AndroidDriver<? extends MobileElement>) driver;

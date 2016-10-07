@@ -11,15 +11,12 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
-        features = {"src/test/resources/features"},
-        glue = "com.android.test.stepdefs",
+        features = {"classpath:features"},
         tags = {"~@ignore", "@wip"})
 public class RunCukesTest {
 
-    public static final String appiumLog = System.getProperty("appium.log");
-    public static final String appiumHost = System.getProperty("appium.host");
-    public static final int appiumPort = Integer.parseInt(System.getProperty("appium.port"));
-    private static AppiumServer appiumServer = new AppiumServer(appiumHost, appiumPort, appiumLog);
+    private static final AppiumServer appiumServer =
+            new AppiumServer(System.getProperty("appium.host"), Integer.parseInt(System.getProperty("appium.port")));
 
     @BeforeClass
     public static void startAppium() {

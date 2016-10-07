@@ -1,4 +1,4 @@
-package com.appium.api.driver;
+package com.appium.api.base;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractBase {
 
-    public AppiumDriver<? extends MobileElement> driver;
+    public final AppiumDriver<? extends MobileElement> driver;
 
     public AbstractBase(AppiumDriver<? extends MobileElement> driver) {
         this.driver = driver;
@@ -108,7 +108,7 @@ public abstract class AbstractBase {
     }
 
     public void type(String element, int index, String text) {
-        getElementList(element).get(index).click();
+        getElementList(element).get(index).sendKeys(text);
     }
 
     public void ifPresentThenClickOnIt(String arg0, String arg1) {
@@ -155,7 +155,7 @@ public abstract class AbstractBase {
 
     public void threadWait(double seconds) {
         try {
-            Thread.sleep((long) (seconds * 1000));
+            Thread.sleep((long) (0.25 * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -171,12 +171,12 @@ public abstract class AbstractBase {
     }
 
     protected String captureLog(String log) {
-        String strLog = null;
+        StringBuilder deviceLog = new StringBuilder();
         List<LogEntry> logEntries = driver.manage().logs().get(log).getAll();
         for (LogEntry logLine : logEntries) {
-            strLog += logLine + System.lineSeparator();
+            deviceLog.append(logLine).append(System.lineSeparator());
         }
-        return strLog;
+        return deviceLog.toString();
     }
 
     public abstract String captureLog();

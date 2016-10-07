@@ -1,6 +1,6 @@
 package com.android.test.base;
 
-import com.appium.api.driver.AndroidBase;
+import com.appium.api.base.AndroidBase;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.android.test;
+package com.appium.api;
 
 import com.appium.api.server.AppiumServer;
 import cucumber.api.CucumberOptions;
@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
+        glue = {"com.android.test", "com.appium.api.hooks"},
         tags = {"~@ignore", "@wip"})
 public class RunCukesTest {
 

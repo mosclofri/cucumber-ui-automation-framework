@@ -33,15 +33,13 @@ public abstract class AbstractBase {
                 case "id":
                     element = driver.findElement(MobileBy.id(locatorValue));
                     break;
-                case "name":
-                    element = driver.findElement(MobileBy.name(locatorValue));
-                    break;
-                case "xpath":
-                    element = driver.findElement(MobileBy.xpath(locatorValue));
-                    break;
-                case "acc":
+                case "ac":
                     element = driver.findElement(MobileBy.AccessibilityId(locatorValue));
                     break;
+                case "xp":
+                    element = driver.findElement(MobileBy.xpath(locatorValue));
+                    break;
+
                 default:
                     System.out.println("getElement method had an error");
             }
@@ -60,14 +58,11 @@ public abstract class AbstractBase {
                 case "id":
                     elementList = driver.findElements(MobileBy.id(locatorValue));
                     break;
-                case "name":
-                    elementList = driver.findElements(MobileBy.name(locatorValue));
-                    break;
-                case "xpath":
-                    elementList = driver.findElements(MobileBy.xpath(locatorValue));
-                    break;
-                case "acc":
+                case "ac":
                     elementList = driver.findElements(MobileBy.AccessibilityId(locatorValue));
+                    break;
+                case "xp":
+                    elementList = driver.findElements(MobileBy.xpath(locatorValue));
                     break;
                 default:
                     System.out.println("getElement method had an error");
@@ -182,7 +177,6 @@ public abstract class AbstractBase {
     public abstract String captureLog();
 
     public enum Wait {
-        THREE_SECONDS(3),
         FIVE_SECONDS(5),
         TEN_SECONDS(10),
         FIFTEEN_SECONDS(15),
@@ -190,7 +184,6 @@ public abstract class AbstractBase {
         THIRTY_SECONDS(30),
         FORTYFIVE_SECONDS(45),
         SIXTY_SECONDS(60);
-
         private final int value;
 
         Wait(final int t) {

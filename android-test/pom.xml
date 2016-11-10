@@ -36,7 +36,7 @@
                 <version>${surefire-version}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <appfile>ApiDemos-debug.apk</appfile>
+                        <file>ApiDemos-debug.apk</file>
                         <appium.host>127.0.0.1</appium.host>
                         <appium.port>4799</appium.port>
                         <implicit.wait>20</implicit.wait>

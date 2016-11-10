@@ -15,14 +15,3 @@ Feature: Alert Dialogs
     And I click on 'id#button1'
     And I click on 'Repeat alarm'
     Then all 'id#text1' should be selected
-
-  @wip
-  Scenario: Single Choice List
-    When I click on 'Single choice list'
-    Then "id#alertTitle" should be displayed
-
-    When I click on 'name#Traffic'
-    And I click on 'id#button1'
-
-    When I click on 'Single choice list'
-    Then 'name#Traffic' should be selected

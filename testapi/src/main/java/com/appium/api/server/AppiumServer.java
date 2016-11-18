@@ -1,5 +1,6 @@
 package com.appium.api.server;
 
+import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -28,15 +29,27 @@ public class AppiumServer {
 
     public static DesiredCapabilities getDesiredCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, System.getProperty("platform.name"));
-        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, System.getProperty("device.name"));
-        capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(System.getProperty("no.reset")));
         try {
             capabilities.setCapability(MobileCapabilityType.APP,
                     new File(URLDecoder.decode(ClassLoader.getSystemResource(System.getProperty("file")).getFile(),
                             StandardCharsets.UTF_8.toString())).getAbsolutePath());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        }
+        String currentTestPlatform = System.getProperty("platform.name");
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, currentTestPlatform);
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, System.getProperty("device.name"));
+        capabilities.setCapability(MobileCapabilityType.UDID, System.getProperty("device.name"));
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(System.getProperty("no.reset")));
+        switch (currentTestPlatform.toLowerCase()) {
+            case "ios":
+                break;
+                //some ios capability
+            case "android":
+                capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);
+                break;
+            default:
+                throw new IllegalArgumentException("Current test platform is not supported: " + currentTestPlatform);
         }
         return capabilities;
     }

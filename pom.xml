@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cucumber.appium.java</groupId>
-    <artifactId>appium-java</artifactId>
+    <artifactId>cucumber-appium-java</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
 

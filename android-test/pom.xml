@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>cucumber.appium.java</groupId>
-        <artifactId>appium-java</artifactId>
+        <artifactId>cucumber-appium-java</artifactId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -41,7 +41,7 @@
                         <appium.port>4799</appium.port>
                         <implicit.wait>20</implicit.wait>
                         <platform.name>Android</platform.name>
-                        <device.name>Nexus</device.name>
+                        <device.name>emulator-5554</device.name>
                         <no.reset>true</no.reset>
                         <appium.log>info</appium.log>
                     </systemPropertyVariables>

@@ -150,7 +150,7 @@ public abstract class AbstractBase {
 
     public void threadWait(double seconds) {
         try {
-            Thread.sleep((long) (0.25 * 1000));
+            Thread.sleep((long) (seconds * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

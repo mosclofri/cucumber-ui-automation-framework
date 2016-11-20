@@ -4,12 +4,11 @@ Feature: Alert Dialogs
   Background:
     When I click on 'App'
     And I click on 'Alert Dialogs'
-    Then "Repeat alarm" should be displayed
+    Then 'Repeat alarm' should be displayed
 
-  @wip
   Scenario: Repeat Alarm
     When I click on 'Repeat alarm'
-    Then "id#alertTitle" should be displayed
+    Then 'id#alertTitle' should be displayed
 
     When I click on all unselected 'id#text1'
     And I click on 'id#button1'

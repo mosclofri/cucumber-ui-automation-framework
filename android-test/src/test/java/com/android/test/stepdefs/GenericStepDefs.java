@@ -4,14 +4,14 @@ import com.android.test.base.ApiDemosDriver;
 import cucumber.api.java.en.Given;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ApiDemosGenericStepDefs {
+public class GenericStepDefs {
 
     @Autowired
-    public ApiDemosDriver apiDemosGenericStepDefs;
+    public ApiDemosDriver genericStepDefs;
 
     @Given("^I am on 'App' screen$")
     public void givenIAmOnAppScreen() {
-        apiDemosGenericStepDefs.click("App");
+        genericStepDefs.click("App");
     }
 
 }

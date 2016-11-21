@@ -3,6 +3,8 @@ package com.appium.api.base;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 
+import static org.junit.Assert.fail;
+
 public class AndroidBase extends AbstractBase {
 
     public AndroidBase(AndroidDriver<? extends MobileElement> driver) {
@@ -20,17 +22,16 @@ public class AndroidBase extends AbstractBase {
         return captureLog("logcat");
     }
 
-    public Boolean isChecked(String element) {
-        return Boolean.parseBoolean(getElement(element).getAttribute("checked"));
+    public Boolean isChecked(MobileElement element) {
+        return Boolean.parseBoolean(element.getAttribute("checked"));
     }
 
-    public Boolean isAllChecked(String elements) {
+    public void isAllChecked(String elements) {
         for (MobileElement anElementList : getElementList(elements)) {
-            if (Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
-                return false;
+            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
+                fail("'" + anElementList.getText() + "' is not checked");
             }
         }
-        return true;
     }
 
     public void checkAll(String elements) {

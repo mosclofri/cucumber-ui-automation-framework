@@ -7,6 +7,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -44,6 +46,15 @@ final class TestCapabilities {
                 System.exit(1);
         }
         return capabilities;
+    }
+
+    public static URL getUrl() {
+        try {
+            return new URL("http://" + APPIUM_HOST + ":" + APPIUM_PORT + "/wd/hub");
+        } catch (MalformedURLException e) {
+            log.error("Cannot initiate REST http interface listener URL");
+            return null;
+        }
     }
 
 }

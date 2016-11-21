@@ -1,4 +1,4 @@
-package com.appium.api.hooks;
+package com.appium.api.stepdefs;
 
 import com.appium.api.base.AbstractBase;
 import cucumber.api.Scenario;

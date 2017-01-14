@@ -11,5 +11,7 @@ public final class Property {
     public static final String NO_RESET = System.getProperty("no.reset");
     public static final String APP_FILE = System.getProperty("file");
     public static final String IMPLICIT_WAIT_TIME = System.getProperty("implicit.wait");
+    public static final String COMPARE_IMAGE = System.getProperty("compare.image");
+    public static final String TESTRAIL_URL = System.getProperty("testrail.url");
 
 }

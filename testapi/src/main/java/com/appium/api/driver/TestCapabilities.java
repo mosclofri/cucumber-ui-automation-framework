@@ -2,7 +2,6 @@ package com.appium.api.driver;
 
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -14,9 +13,9 @@ import java.nio.charset.StandardCharsets;
 
 import static com.appium.api.support.Property.*;
 
-final class TestCapabilities {
+//import org.apache.log4j.Logger;
 
-    private static final Logger log = Logger.getLogger(TestCapabilities.class);
+final class TestCapabilities {
 
     public static DesiredCapabilities getDesiredCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -25,10 +24,10 @@ final class TestCapabilities {
                     new File(URLDecoder.decode(ClassLoader.getSystemResource((APP_FILE)).getFile(),
                             StandardCharsets.UTF_8.toString())).getAbsolutePath());
         } catch (NullPointerException e) {
-            log.error(e);
+            System.err.println(e);
             System.exit(1);
         } catch (UnsupportedEncodingException e) {
-            log.warn(e);
+            System.err.println(e);
         }
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, APPIUM_PLATFORM);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
@@ -42,7 +41,7 @@ final class TestCapabilities {
                 capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);
                 break;
             default:
-                log.fatal("Current test platform is not supported: " + APPIUM_PLATFORM);
+                //log.fatal("Current test platform is not supported: " + APPIUM_PLATFORM);
                 System.exit(1);
         }
         return capabilities;
@@ -52,7 +51,7 @@ final class TestCapabilities {
         try {
             return new URL("http://" + APPIUM_HOST + ":" + APPIUM_PORT + "/wd/hub");
         } catch (MalformedURLException e) {
-            log.error("Cannot initiate REST http interface listener URL");
+            System.err.println("Cannot initiate REST http interface listener URL");
             return null;
         }
     }

@@ -42,8 +42,10 @@
                         <implicit.wait>20</implicit.wait>
                         <platform.name>Android</platform.name>
                         <device.name>emulator-5554</device.name>
+                        <compare.image>true</compare.image>
                         <no.reset>true</no.reset>
                         <appium.log>info</appium.log>
+                        <testrail.url>https://???/index.php?/cases/view/</testrail.url>
                     </systemPropertyVariables>
                     <testFailureIgnore>true</testFailureIgnore>
                     <workingDirectory>${basedir}</workingDirectory>
@@ -65,7 +67,6 @@
                             <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
                             <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
                             <parallelTesting>false</parallelTesting>
-                            <skippedFails>true</skippedFails>
                         </configuration>
                     </execution>
                 </executions>

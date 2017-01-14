@@ -1,23 +1,38 @@
 package com.appium.api.base;
 
+import com.appium.api.support.ImageCompare;
+import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
-import org.junit.Assert;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.logging.LogEntry;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.appium.api.support.Property.COMPARE_IMAGE;
+import static com.appium.api.support.Property.IMPLICIT_WAIT_TIME;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 
 public abstract class AbstractBase {
 
     public final AppiumDriver<? extends MobileElement> driver;
 
+    public Scenario scenario;
+
     public AbstractBase(AppiumDriver<? extends MobileElement> driver) {
         this.driver = driver;
+    }
+
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
     }
 
     public AppiumDriver<? extends MobileElement> getDriver() {
@@ -83,11 +98,11 @@ public abstract class AbstractBase {
     }
 
     public void shouldDisplay(String element) {
-        Assert.assertTrue(isElementPresent(element));
+        assertTrue(isElementPresent(element));
     }
 
     public void shouldNotDisplay(String element) {
-        Assert.assertTrue(!isElementPresent(element));
+        assertTrue(!isElementPresent(element));
     }
 
     public void click(String element) {
@@ -107,11 +122,11 @@ public abstract class AbstractBase {
     }
 
     public void ifPresentThenClickOnIt(String arg0, String arg1) {
-        setWaitTime(Wait.FIVE_SECONDS);
+        setWaitTime(1);
         if (isElementPresent(arg0)) {
             click(arg1);
         }
-        setWaitTime(Wait.TWENTY_SECONDS);
+        setWaitTime(Integer.parseInt(IMPLICIT_WAIT_TIME));
     }
 
     public void swipeLeft() {
@@ -156,8 +171,8 @@ public abstract class AbstractBase {
         }
     }
 
-    public void setWaitTime(Wait time) {
-        driver.manage().timeouts().implicitlyWait(time.getValue(), TimeUnit.SECONDS);
+    public void setWaitTime(int duration) {
+        driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
     public byte[] takeScreenShotAsByte() {
@@ -165,7 +180,7 @@ public abstract class AbstractBase {
         return driver.getScreenshotAs(OutputType.BYTES);
     }
 
-    protected String captureLog(String log) {
+    public String captureLog(String log) {
         StringBuilder deviceLog = new StringBuilder();
         List<LogEntry> logEntries = driver.manage().logs().get(log).getAll();
         for (LogEntry logLine : logEntries) {
@@ -176,22 +191,52 @@ public abstract class AbstractBase {
 
     public abstract String captureLog();
 
-    public enum Wait {
-        FIVE_SECONDS(5),
-        TEN_SECONDS(10),
-        FIFTEEN_SECONDS(15),
-        TWENTY_SECONDS(20),
-        THIRTY_SECONDS(30),
-        FORTYFIVE_SECONDS(45),
-        SIXTY_SECONDS(60);
-        private final int value;
+    public void compareImage(String expectedImage, int errorThreshold) {
+        if (!Boolean.valueOf(COMPARE_IMAGE)) {
+            return;
+        }
+        ImageCompare imageCompare = new ImageCompare();
+        System.out.println("Comparing current screen with " + expectedImage);
 
-        Wait(final int t) {
-            value = t;
+        String expectedImagePath = getClass().getClassLoader().getResource("expected_images/" + expectedImage).getPath();
+
+        BufferedImage imgInput1 = imageCompare.loadImage(expectedImagePath);
+        threadWait(0.25);
+        BufferedImage imgInput2 = imageCompare.loadImage(driver.getScreenshotAs(OutputType.FILE).getAbsolutePath());
+
+        assert imgInput1 != null && imgInput2 != null;
+        assert imgInput1.getWidth() == imgInput2.getWidth();
+
+        int width = imgInput1.getWidth();
+        int differenceCounter = 0;
+        Color black = new Color(0, 0, 0);
+        Color white = new Color(255, 255, 255);
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < Math.min(imgInput1.getHeight(), imgInput2.getHeight()); y++) {
+                Color color1 = new Color(imgInput1.getRGB(x, y));
+                Color color2 = new Color(imgInput2.getRGB(x, y));
+
+                int differenceRed = Math.abs(color1.getRed() - color2.getRed());
+                int differenceGreen = Math.abs(color1.getGreen() - color2.getGreen());
+                int differenceBlue = Math.abs(color1.getBlue() - color2.getBlue());
+                int difference = differenceRed + differenceGreen + differenceBlue;
+
+                double relativeDifference = (double) difference / (256 * 3);
+
+                if (relativeDifference > ImageCompare.colorThreshold) {
+                    imgInput1.setRGB(x, y, black.getRGB());
+                    imageCompare.addToRectangles(x, y);
+                    differenceCounter++;
+                } else {
+                    imgInput1.setRGB(x, y, white.getRGB());
+                }
+            }
         }
 
-        public int getValue() {
-            return value;
+        if (differenceCounter / width > errorThreshold) {
+            scenario.embed(imageCompare.saveByteImage(imgInput1), "image/png");
+            fail(differenceCounter / width + " differences found which is greater than given threshold " + errorThreshold);
         }
     }
 

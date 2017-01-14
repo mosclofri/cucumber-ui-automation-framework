@@ -11,6 +11,7 @@ public class GenericStepDefs {
 
     @Given("^I am on 'App' screen$")
     public void givenIAmOnAppScreen() {
+        genericStepDefs.compareImage("main_screen.png", 1);
         genericStepDefs.click("App");
     }
 

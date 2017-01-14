@@ -4,7 +4,9 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
-import static com.appium.api.support.Property.*;
+import static com.appium.api.support.Property.APPIUM_HOST;
+import static com.appium.api.support.Property.APPIUM_LOG_LEVEL;
+import static com.appium.api.support.Property.APPIUM_PORT;
 import static io.appium.java_client.service.local.AppiumDriverLocalService.buildService;
 
 public final class AppiumServer {

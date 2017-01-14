@@ -13,7 +13,7 @@ import static com.appium.api.server.AppiumServer.stopAppiumServer;
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
-        glue = {"com.android.test", "com.appium.api.hooks"},
+        glue = {"com.android.test", "com.appium.api.stepdefs"},
         tags = {"~@ignore"})
 public class RunCukesTest {
 

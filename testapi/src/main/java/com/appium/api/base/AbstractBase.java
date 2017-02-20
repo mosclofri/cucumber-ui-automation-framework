@@ -5,12 +5,13 @@ import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.logging.LogEntry;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,12 +24,18 @@ import static org.junit.Assert.fail;
 
 public abstract class AbstractBase {
 
+    private static final Logger LOG = Logger.getLogger(AbstractBase.class);
+
     public final AppiumDriver<? extends MobileElement> driver;
 
     public Scenario scenario;
 
     public AbstractBase(AppiumDriver<? extends MobileElement> driver) {
         this.driver = driver;
+    }
+
+    public Scenario getScenario() {
+        return scenario;
     }
 
     public void setScenario(Scenario scenario) {
@@ -40,6 +47,7 @@ public abstract class AbstractBase {
     }
 
     public MobileElement getElement(String locatorName) {
+        LOG.info("Trying to get element: '" + locatorName + "'");
         MobileElement element = null;
         if (locatorName.contains("#")) {
             String locatorStrategy = locatorName.split("#")[0];
@@ -54,9 +62,8 @@ public abstract class AbstractBase {
                 case "xp":
                     element = driver.findElement(MobileBy.xpath(locatorValue));
                     break;
-
                 default:
-                    System.out.println("getElement method had an error");
+                    LOG.error("Given locatorStrategy does not match any case state");
             }
         } else {
             element = driver.findElement(MobileBy.AccessibilityId(locatorName));
@@ -65,6 +72,7 @@ public abstract class AbstractBase {
     }
 
     public List<? extends MobileElement> getElementList(String locatorName) {
+        LOG.info("Trying to get elementList: '" + locatorName + "'");
         List<? extends MobileElement> elementList = null;
         if (locatorName.contains("#")) {
             String locatorStrategy = locatorName.split("#")[0];
@@ -80,7 +88,7 @@ public abstract class AbstractBase {
                     elementList = driver.findElements(MobileBy.xpath(locatorValue));
                     break;
                 default:
-                    System.out.println("getElement method had an error");
+                    LOG.error("Given locatorStrategy does not match any case state");
             }
         } else {
             elementList = driver.findElements(MobileBy.AccessibilityId(locatorName));
@@ -93,31 +101,38 @@ public abstract class AbstractBase {
             getElement(element);
             return true;
         } catch (NoSuchElementException e) {
+            LOG.warn("Cannot find given element: '" + element + "'");
             return false;
         }
     }
 
     public void shouldDisplay(String element) {
+        LOG.info("Given element: '" + element + "' should be displayed");
         assertTrue(isElementPresent(element));
     }
 
     public void shouldNotDisplay(String element) {
+        LOG.info("Given element: '" + element + "' should not be displayed");
         assertTrue(!isElementPresent(element));
     }
 
     public void click(String element) {
+        LOG.info("Will try to click to element: '" + element + "'");
         getElement(element).click();
     }
 
     public void click(String element, int index) {
+        LOG.info("Will try to click to element: '" + element + "' at index: '" + index + "'");
         getElementList(element).get(index).click();
     }
 
     public void type(String element, String text) {
+        LOG.info("Will try to sendKeys to element: '" + element + "'");
         getElement(element).sendKeys(text);
     }
 
     public void type(String element, int index, String text) {
+        LOG.info("Will try to sendKeys to element: '" + element + "' at index: '" + index + "'");
         getElementList(element).get(index).sendKeys(text);
     }
 
@@ -160,11 +175,15 @@ public abstract class AbstractBase {
             default:
                 getDriver().navigate().to(element);
                 break;
+
         }
     }
 
     public void threadWait(double seconds) {
         try {
+            if (seconds > 3) {
+                LOG.info("Waiting '" + seconds + "' seconds");
+            }
             Thread.sleep((long) (seconds * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -172,15 +191,18 @@ public abstract class AbstractBase {
     }
 
     public void setWaitTime(int duration) {
+        LOG.info("Setting implicit wait time for driver: '" + duration + "'");
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
     public byte[] takeScreenShotAsByte() {
+        LOG.info("Capturing a screenshot");
         threadWait(0.25);
         return driver.getScreenshotAs(OutputType.BYTES);
     }
 
     public String captureLog(String log) {
+        LOG.info("Capturing device logs");
         StringBuilder deviceLog = new StringBuilder();
         List<LogEntry> logEntries = driver.manage().logs().get(log).getAll();
         for (LogEntry logLine : logEntries) {
@@ -195,8 +217,8 @@ public abstract class AbstractBase {
         if (!Boolean.valueOf(COMPARE_IMAGE)) {
             return;
         }
+        LOG.info("Comparing current screen with: '" + expectedImage + "' with using given threshold value: " + errorThreshold);
         ImageCompare imageCompare = new ImageCompare();
-        System.out.println("Comparing current screen with " + expectedImage);
 
         String expectedImagePath = getClass().getClassLoader().getResource("expected_images/" + expectedImage).getPath();
 
@@ -234,9 +256,11 @@ public abstract class AbstractBase {
             }
         }
 
-        if (differenceCounter / width > errorThreshold) {
+        int differenceThreshold = differenceCounter / width;
+        if (differenceThreshold > errorThreshold) {
+            LOG.info(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
             scenario.embed(imageCompare.saveByteImage(imgInput1), "image/png");
-            fail(differenceCounter / width + " differences found which is greater than given threshold " + errorThreshold);
+            fail(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
         }
     }
 

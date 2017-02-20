@@ -18,10 +18,10 @@
         <compiler-version>3.3</compiler-version>
         <appium-java-version>4.1.2</appium-java-version>
         <cucumber-version>1.2.5</cucumber-version>
-        <spring-version>4.3.5.RELEASE</spring-version>
+        <spring-version>4.3.6.RELEASE</spring-version>
         <surefire-version>2.19.1</surefire-version>
-        <compiler-version>3.6.0</compiler-version>
-        <reporting-version>3.4.0</reporting-version>
+        <reporting-version>3.5.0</reporting-version>
+        <log4j-version>1.2.17</log4j-version>
     </properties>
 
 </project>

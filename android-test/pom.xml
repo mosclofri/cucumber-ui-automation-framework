@@ -44,7 +44,7 @@
                         <device.name>emulator-5554</device.name>
                         <compare.image>true</compare.image>
                         <no.reset>true</no.reset>
-                        <appium.log>info</appium.log>
+                        <appium.log>warn</appium.log>
                         <testrail.url>https://???/index.php?/cases/view/</testrail.url>
                     </systemPropertyVariables>
                     <testFailureIgnore>true</testFailureIgnore>

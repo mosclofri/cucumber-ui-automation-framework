@@ -2,6 +2,7 @@ package com.appium.api.driver;
 
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -13,9 +14,9 @@ import java.nio.charset.StandardCharsets;
 
 import static com.appium.api.support.Property.*;
 
-//import org.apache.log4j.Logger;
-
 final class TestCapabilities {
+
+    private static final Logger LOG = Logger.getLogger(TestCapabilities.class);
 
     public static DesiredCapabilities getDesiredCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -24,10 +25,9 @@ final class TestCapabilities {
                     new File(URLDecoder.decode(ClassLoader.getSystemResource((APP_FILE)).getFile(),
                             StandardCharsets.UTF_8.toString())).getAbsolutePath());
         } catch (NullPointerException e) {
-            System.err.println(e);
-            System.exit(1);
+            LOG.error("Cannot find given application file" + e);
         } catch (UnsupportedEncodingException e) {
-            System.err.println(e);
+            LOG.warn(e);
         }
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, APPIUM_PLATFORM);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
@@ -41,8 +41,7 @@ final class TestCapabilities {
                 capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);
                 break;
             default:
-                //log.fatal("Current test platform is not supported: " + APPIUM_PLATFORM);
-                System.exit(1);
+                LOG.error("Current test platform is not supported: " + APPIUM_PLATFORM);
         }
         return capabilities;
     }

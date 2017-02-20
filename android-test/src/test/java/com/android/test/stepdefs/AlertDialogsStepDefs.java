@@ -22,7 +22,6 @@ public class AlertDialogsStepDefs {
     @Given("^I am on 'Alert Dialogs' screen$")
     public void givenIAmOnAlertDialogsScreen() {
         genericStepDefs.givenIAmOnAppScreen();
-        alertDialogsStepDefs.compareImage("main_screen.png", 100);
         alertDialogsStepDefs.click("Alert Dialogs");
     }
 

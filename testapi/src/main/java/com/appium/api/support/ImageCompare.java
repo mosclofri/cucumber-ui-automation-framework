@@ -12,28 +12,7 @@ public class ImageCompare {
 
     public static final int distanceThreshold = 25;
     public static final double colorThreshold = 0.5;
-    public static LinkedList<Rectangle> rectangles = new LinkedList<>();
-
-    public byte[] saveByteImage(BufferedImage bufferedImage) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bufferedImage, "png", baos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return baos.toByteArray();
-    }
-
-    public BufferedImage loadImage(String input) {
-        BufferedImage bufferedImage;
-        try {
-            bufferedImage = ImageIO.read(new File(input));
-            return bufferedImage;
-        } catch (IOException e) {
-            System.err.println("ERROR: could not load " + input);
-        }
-        return null;
-    }
+    public LinkedList<Rectangle> rectangles = new LinkedList<>();
 
     public void addToRectangles(int x, int y) {
         Rectangle rectangle = findRectangleNearby(x, y);
@@ -62,6 +41,27 @@ public class ImageCompare {
                 return r;
         }
         return null;
+    }
+
+    public BufferedImage loadImage(String input) {
+        BufferedImage bufferedImage;
+        try {
+            bufferedImage = ImageIO.read(new File(input));
+            return bufferedImage;
+        } catch (IOException e) {
+            System.err.println("ERROR: could not load " + input);
+        }
+        return null;
+    }
+
+    public byte[] saveByteImage(BufferedImage bufferedImage) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bufferedImage, "png", baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
     }
 
 }

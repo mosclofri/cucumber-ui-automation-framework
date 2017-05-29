@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>cucumber.appium.java</groupId>
-        <artifactId>cucumber-appium-java</artifactId>
-        <version>1.0.0</version>
+        <groupId>com.github.mosclofri</groupId>
+        <artifactId>cucumber-appium-java-framework</artifactId>
+        <version>0.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

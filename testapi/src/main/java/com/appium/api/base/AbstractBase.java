@@ -1,26 +1,31 @@
 package com.appium.api.base;
 
 import com.appium.api.support.ImageCompare;
+import com.appium.api.support.Property;
 import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.NoSuchElementException;
+import org.junit.AssumptionViolatedException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.logging.LogEntry;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.appium.api.support.Property.COMPARE_IMAGE;
-import static com.appium.api.support.Property.IMPLICIT_WAIT_TIME;
-import static org.junit.Assert.assertTrue;
+import static com.appium.api.support.Property.*;
 import static org.junit.Assert.fail;
-
 
 public abstract class AbstractBase {
 
@@ -34,6 +39,132 @@ public abstract class AbstractBase {
         this.driver = driver;
     }
 
+    public String captureLog() {
+        LOG.info("Capturing device logs");
+        String logType;
+        if (Property.APPIUM_PLATFORM.equalsIgnoreCase("android"))
+            logType = "logcat";
+        else
+            logType = "syslog";
+        StringBuilder deviceLog = new StringBuilder();
+        List<LogEntry> logEntries = driver.manage().logs().get(logType).getAll();
+        for (LogEntry logLine : logEntries) {
+            deviceLog.append(logLine).append(System.lineSeparator());
+        }
+        return deviceLog.toString();
+    }
+
+    public void compareImage(int errorThreshold) {
+        String currentMethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        Pattern p = Pattern.compile("given|and|when|then");
+        Matcher m = p.matcher(currentMethodName);
+        if (m.find()) {
+            currentMethodName = currentMethodName.substring(m.end());
+        }
+        compareImage(currentMethodName, errorThreshold);
+    }
+
+    public void compareImage(String expectedImage, int errorThreshold) {
+        File screenShot;
+        String deviceName = null;
+
+        if (COMPARE_IMAGE.matches("true|record")) {
+            if (APPIUM_PLATFORM.equalsIgnoreCase("android")) {
+                deviceName = executeShellReturnStringResult("adb -s " + DEVICE_NAME + " shell getprop ro.product.model");
+            } else {
+                deviceName = DEVICE_NAME;
+            }
+            screenShot = new File("./src/test/resources/expected_images/" + deviceName + "/" + expectedImage + ".png");
+        } else {
+            return;
+        }
+
+        if (COMPARE_IMAGE.matches("true")) {
+            if (!screenShot.exists()) {
+                LOG.warn("There is no existing image for : " + expectedImage + ".png for device: " + deviceName);
+                return;
+            }
+            LOG.info("Comparing current screen with: '" + expectedImage + "' with using given threshold value: " + errorThreshold);
+            ImageCompare imageCompare = new ImageCompare();
+
+            BufferedImage imgInput1 = imageCompare.loadImage(screenShot.getPath());
+            threadWait(0.25);
+            BufferedImage imgInput2 = imageCompare.loadImage(driver.getScreenshotAs(OutputType.FILE).getAbsolutePath());
+
+            int width = imgInput1.getWidth();
+            int differenceCounter = 0;
+            Color black = new Color(0, 0, 0);
+            Color white = new Color(255, 255, 255);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < Math.min(imgInput1.getHeight(), imgInput2.getHeight()); y++) {
+                    Color color1 = new Color(imgInput1.getRGB(x, y));
+                    Color color2 = new Color(imgInput2.getRGB(x, y));
+
+                    int differenceRed = Math.abs(color1.getRed() - color2.getRed());
+                    int differenceGreen = Math.abs(color1.getGreen() - color2.getGreen());
+                    int differenceBlue = Math.abs(color1.getBlue() - color2.getBlue());
+                    int difference = differenceRed + differenceGreen + differenceBlue;
+
+                    double relativeDifference = (double) difference / (256 * 3);
+
+                    if (relativeDifference > ImageCompare.colorThreshold) {
+                        imgInput1.setRGB(x, y, black.getRGB());
+                        imageCompare.addToRectangles(x, y);
+                        differenceCounter++;
+                    } else {
+                        imgInput1.setRGB(x, y, white.getRGB());
+                    }
+                }
+            }
+
+            int differenceThreshold = differenceCounter / width;
+            if (differenceThreshold > errorThreshold) {
+                LOG.info(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
+                scenario.embed(imageCompare.saveByteImage(imgInput1), "image/png");
+                fail(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
+            }
+        }
+
+        if (COMPARE_IMAGE.matches("record")) {
+            threadWait(0.25);
+            File deviceScreen = driver.getScreenshotAs(OutputType.FILE);
+            if (!screenShot.exists()) {
+                try {
+                    LOG.info("Saving current screen as: " + expectedImage + ".png for device:" + deviceName);
+                    FileUtils.copyFile(deviceScreen, new File(screenShot.getAbsolutePath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                LOG.info("There is already saved screenShot: " + expectedImage + ".png for device: " + deviceName);
+            }
+        }
+    }
+
+    public String executeShellReturnStringResult(String command) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        CommandLine commandline = CommandLine.parse(command);
+        DefaultExecutor exec = new DefaultExecutor();
+        PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream);
+        try {
+            exec.setStreamHandler(streamHandler);
+            exec.execute(commandline);
+            return outputStream.toString("UTF-8").substring(0, outputStream.toString().length() - 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getAndroidSDKVersion() {
+        return executeShellReturnStringResult("adb -s " + DEVICE_NAME + " shell getprop ro.build.version.sdk");
+    }
+
+    public AppiumDriver<? extends MobileElement> getDriver() {
+        return driver;
+    }
+
     public Scenario getScenario() {
         return scenario;
     }
@@ -42,141 +173,24 @@ public abstract class AbstractBase {
         this.scenario = scenario;
     }
 
-    public AppiumDriver<? extends MobileElement> getDriver() {
-        return driver;
+    public void setDefaultDriverWaitTime() {
+        setDriverWaitTime(Integer.parseInt(IMPLICIT_WAIT_TIME));
     }
 
-    public MobileElement getElement(String locatorName) {
-        LOG.info("Trying to get element: '" + locatorName + "'");
-        MobileElement element = null;
-        if (locatorName.contains("#")) {
-            String locatorStrategy = locatorName.split("#")[0];
-            String locatorValue = locatorName.split("#")[1];
-            switch (locatorStrategy) {
-                case "id":
-                    element = driver.findElement(MobileBy.id(locatorValue));
-                    break;
-                case "ac":
-                    element = driver.findElement(MobileBy.AccessibilityId(locatorValue));
-                    break;
-                case "xp":
-                    element = driver.findElement(MobileBy.xpath(locatorValue));
-                    break;
-                default:
-                    LOG.error("Given locatorStrategy does not match any case state");
-            }
-        } else {
-            element = driver.findElement(MobileBy.AccessibilityId(locatorName));
-        }
-        return element;
+    public void setDriverWaitTime(int duration) {
+        LOG.info("Setting implicit wait time for driver: '" + duration + "'");
+        driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
-    public List<? extends MobileElement> getElementList(String locatorName) {
-        LOG.info("Trying to get elementList: '" + locatorName + "'");
-        List<? extends MobileElement> elementList = null;
-        if (locatorName.contains("#")) {
-            String locatorStrategy = locatorName.split("#")[0];
-            String locatorValue = locatorName.split("#")[1];
-            switch (locatorStrategy) {
-                case "id":
-                    elementList = driver.findElements(MobileBy.id(locatorValue));
-                    break;
-                case "ac":
-                    elementList = driver.findElements(MobileBy.AccessibilityId(locatorValue));
-                    break;
-                case "xp":
-                    elementList = driver.findElements(MobileBy.xpath(locatorValue));
-                    break;
-                default:
-                    LOG.error("Given locatorStrategy does not match any case state");
-            }
-        } else {
-            elementList = driver.findElements(MobileBy.AccessibilityId(locatorName));
-        }
-        return elementList;
+    public void skipScenario(String reasonToSkip) {
+        LOG.info("Will skip current scenario. Reason to skip: " + reasonToSkip);
+        throw new AssumptionViolatedException(reasonToSkip);
     }
 
-    public boolean isElementPresent(String element) {
-        try {
-            getElement(element);
-            return true;
-        } catch (NoSuchElementException e) {
-            LOG.warn("Cannot find given element: '" + element + "'");
-            return false;
-        }
-    }
-
-    public void shouldDisplay(String element) {
-        LOG.info("Given element: '" + element + "' should be displayed");
-        assertTrue(isElementPresent(element));
-    }
-
-    public void shouldNotDisplay(String element) {
-        LOG.info("Given element: '" + element + "' should not be displayed");
-        assertTrue(!isElementPresent(element));
-    }
-
-    public void click(String element) {
-        LOG.info("Will try to click to element: '" + element + "'");
-        getElement(element).click();
-    }
-
-    public void click(String element, int index) {
-        LOG.info("Will try to click to element: '" + element + "' at index: '" + index + "'");
-        getElementList(element).get(index).click();
-    }
-
-    public void type(String element, String text) {
-        LOG.info("Will try to sendKeys to element: '" + element + "'");
-        getElement(element).sendKeys(text);
-    }
-
-    public void type(String element, int index, String text) {
-        LOG.info("Will try to sendKeys to element: '" + element + "' at index: '" + index + "'");
-        getElementList(element).get(index).sendKeys(text);
-    }
-
-    public void ifPresentThenClickOnIt(String arg0, String arg1) {
-        setWaitTime(1);
-        if (isElementPresent(arg0)) {
-            click(arg1);
-        }
-        setWaitTime(Integer.parseInt(IMPLICIT_WAIT_TIME));
-    }
-
-    public void swipeLeft() {
-        Dimension size = getDriver().manage().window().getSize();
-        int startx = (int) (size.width * 0.8);
-        int endx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
-    }
-
-    public void swipeRight() {
-        Dimension size = getDriver().manage().window().getSize();
-        int endx = (int) (size.width * 0.8);
-        int startx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
-    }
-
-    public void hideKeyboard() {
-        driver.hideKeyboard();
-    }
-
-    public void navigate(String element) {
-        switch (element) {
-            case "Back":
-                getDriver().navigate().back();
-                break;
-            case "Forward":
-                getDriver().navigate().forward();
-                break;
-            default:
-                getDriver().navigate().to(element);
-                break;
-
-        }
+    public byte[] takeScreenShotAsByte() {
+        LOG.info("Capturing a screenshot");
+        threadWait(0.25);
+        return driver.getScreenshotAs(OutputType.BYTES);
     }
 
     public void threadWait(double seconds) {
@@ -187,80 +201,6 @@ public abstract class AbstractBase {
             Thread.sleep((long) (seconds * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void setWaitTime(int duration) {
-        LOG.info("Setting implicit wait time for driver: '" + duration + "'");
-        driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
-    }
-
-    public byte[] takeScreenShotAsByte() {
-        LOG.info("Capturing a screenshot");
-        threadWait(0.25);
-        return driver.getScreenshotAs(OutputType.BYTES);
-    }
-
-    public String captureLog(String log) {
-        LOG.info("Capturing device logs");
-        StringBuilder deviceLog = new StringBuilder();
-        List<LogEntry> logEntries = driver.manage().logs().get(log).getAll();
-        for (LogEntry logLine : logEntries) {
-            deviceLog.append(logLine).append(System.lineSeparator());
-        }
-        return deviceLog.toString();
-    }
-
-    public abstract String captureLog();
-
-    public void compareImage(String expectedImage, int errorThreshold) {
-        if (!Boolean.valueOf(COMPARE_IMAGE)) {
-            return;
-        }
-        LOG.info("Comparing current screen with: '" + expectedImage + "' with using given threshold value: " + errorThreshold);
-        ImageCompare imageCompare = new ImageCompare();
-
-        String expectedImagePath = getClass().getClassLoader().getResource("expected_images/" + expectedImage).getPath();
-
-        BufferedImage imgInput1 = imageCompare.loadImage(expectedImagePath);
-        threadWait(0.25);
-        BufferedImage imgInput2 = imageCompare.loadImage(driver.getScreenshotAs(OutputType.FILE).getAbsolutePath());
-
-        assert imgInput1 != null && imgInput2 != null;
-        assert imgInput1.getWidth() == imgInput2.getWidth();
-
-        int width = imgInput1.getWidth();
-        int differenceCounter = 0;
-        Color black = new Color(0, 0, 0);
-        Color white = new Color(255, 255, 255);
-
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < Math.min(imgInput1.getHeight(), imgInput2.getHeight()); y++) {
-                Color color1 = new Color(imgInput1.getRGB(x, y));
-                Color color2 = new Color(imgInput2.getRGB(x, y));
-
-                int differenceRed = Math.abs(color1.getRed() - color2.getRed());
-                int differenceGreen = Math.abs(color1.getGreen() - color2.getGreen());
-                int differenceBlue = Math.abs(color1.getBlue() - color2.getBlue());
-                int difference = differenceRed + differenceGreen + differenceBlue;
-
-                double relativeDifference = (double) difference / (256 * 3);
-
-                if (relativeDifference > ImageCompare.colorThreshold) {
-                    imgInput1.setRGB(x, y, black.getRGB());
-                    imageCompare.addToRectangles(x, y);
-                    differenceCounter++;
-                } else {
-                    imgInput1.setRGB(x, y, white.getRGB());
-                }
-            }
-        }
-
-        int differenceThreshold = differenceCounter / width;
-        if (differenceThreshold > errorThreshold) {
-            LOG.info(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
-            scenario.embed(imageCompare.saveByteImage(imgInput1), "image/png");
-            fail(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
         }
     }
 

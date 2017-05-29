@@ -9,12 +9,13 @@ import org.junit.runner.RunWith;
 
 import static com.appium.api.server.AppiumServer.startAppiumServer;
 import static com.appium.api.server.AppiumServer.stopAppiumServer;
+import static com.appium.api.support.Property.*;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
-        glue = {"com.android.test", "com.appium.api.stepdefs"},
+        glue = {"com.appium.test.stepdefs", "com.appium.api.stepdefs"},
         tags = {"~@ignore"})
 public class RunCukesTest {
 
@@ -22,13 +23,31 @@ public class RunCukesTest {
 
     @BeforeClass
     public static void startAppium() {
-        LOG.info("### Starting Appium Server ###");
+
+
+        if (APPIUM_PLATFORM.equalsIgnoreCase("android") && DEVICE_NAME.contains("qa-devicefarm")) {
+            LOG.info("### Trying ADB Connect To QA Farm Device ###");
+            try {
+                Runtime rt = Runtime.getRuntime();
+                rt.exec("adb connect " + DEVICE_NAME);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
+        LOG.info("### Starting Appium Server ####");
+        LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG_LEVEL);
+        LOG.info("Platform: " + APPIUM_PLATFORM + " & Test Device: " + DEVICE_NAME);
+        LOG.info("Application In Test: " + APP_FILE);
+        LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);
         startAppiumServer();
+        LOG.info("### Appium Server Started ###");
     }
 
     @AfterClass
     public static void stopAppium() {
         LOG.info("### Closing Appium Server ###");
+        LOG.info("### Closing Done ###");
         stopAppiumServer();
     }
 

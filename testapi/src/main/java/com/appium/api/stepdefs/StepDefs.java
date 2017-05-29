@@ -1,33 +1,38 @@
 package com.appium.api.stepdefs;
 
-import com.appium.api.base.AbstractBase;
-import cucumber.api.java.en.Then;
+import com.appium.api.base.AppiumBase;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class StepDefs {
 
     @Autowired
-    private AbstractBase abstractBase;
+    private AppiumBase appiumBase;
 
-    @When("^I click on '(.*)'$")
-    public void iClickOnElement(String arg0) {
-        abstractBase.click(arg0);
+    @When("^I kill app and restart$")
+    public void whenIKillAppAndRestart() {
+        appiumBase.getDriver().closeApp();
+        appiumBase.getDriver().launchApp();
     }
 
-    @When("^I type '(.*)' to '(.*)'$")
-    public void iClickOnElement(String arg0, String arg1) {
-        abstractBase.type(arg1, arg0);
+    @When("^I swipe down$")
+    public void whenISwipeDown() {
+        appiumBase.swipeDown();
     }
 
-    @Then("^'(.*)' should be displayed$")
-    public void elementShouldBeDisplayed(String arg0) {
-        abstractBase.shouldDisplay(arg0);
+    @When("^I swipe left$")
+    public void whenISwipeLeft() {
+        appiumBase.swipeLeft();
     }
 
-    @Then("^'(.*)' should not be displayed$")
-    public void elementShouldNotBeDisplayed(String arg0) {
-        abstractBase.shouldNotDisplay(arg0);
+    @When("^I swipe right$")
+    public void whenISwipeRight() {
+        appiumBase.swipeRight();
+    }
+
+    @When("^I wait '(.*)' seconds$")
+    public void whenIWaitSeconds(int arg0) {
+        appiumBase.threadWait(arg0);
     }
 
 }

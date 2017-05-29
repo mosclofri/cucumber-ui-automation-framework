@@ -35,7 +35,7 @@ final class TestCapabilities {
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET));
         switch (APPIUM_PLATFORM.toUpperCase()) {
             case "IOS":
-                //some ios capability
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
                 break;
             case "ANDROID":
                 capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);

@@ -1,6 +1,6 @@
 package com.appium.api.stepdefs;
 
-import com.appium.api.base.AbstractBase;
+import com.appium.api.base.AppiumBase;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -12,32 +12,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.appium.api.support.Property.TESTRAIL_URL;
+import static com.appium.api.support.Property.TESTCASE_URL;
 
 public class Hooks {
 
     private static final Logger LOG = Logger.getLogger(Hooks.class);
 
     @Autowired
-    public AbstractBase abstractBase;
-
-    @Before
-    public void before(Scenario scenario) {
-        abstractBase.setScenario(scenario);
-        LOG.info("### Starting scenario: " + abstractBase.getScenario().getName() + " ###");
-    }
+    public AppiumBase appiumBase;
 
     @After
     public void after() {
-        LOG.info("### Ending scenario: " + abstractBase.getScenario().getName() + " ###");
-        List<String> caseList = getScenariosStartWithCaseIds(abstractBase.scenario.getSourceTagNames());
+        LOG.info("### Ending scenario: " + appiumBase.getScenario().getName() + " ###");
+        List<String> caseList = getScenariosStartWithCaseIds(appiumBase.scenario.getSourceTagNames());
         for (String currentTag : caseList) {
-            abstractBase.scenario.write("<a href=\"" + TESTRAIL_URL + currentTag + "\"> TestRail Scenario: C" + currentTag + "</a>");
+            appiumBase.scenario.write("<a href=\"" + TESTCASE_URL + currentTag + "\"> Test Scenario: C" + currentTag + "</a>");
         }
-        if (abstractBase.scenario.isFailed()) {
-            abstractBase.scenario.embed(abstractBase.takeScreenShotAsByte(), "image/png");
-            abstractBase.scenario.embed(abstractBase.captureLog().getBytes(StandardCharsets.UTF_8), "text/html");
+        if (appiumBase.scenario.isFailed()) {
+            appiumBase.scenario.embed(appiumBase.takeScreenShotAsByte(), "image/png");
+            appiumBase.scenario.embed(appiumBase.captureLog().getBytes(StandardCharsets.UTF_8), "text/html");
         }
+    }
+
+    @Before
+    public void before(Scenario scenario) {
+        appiumBase.setScenario(scenario);
+        LOG.info("### Starting scenario: " + appiumBase.getScenario().getName() + " ###");
     }
 
     public List<String> getScenariosStartWithCaseIds(Collection collection) {

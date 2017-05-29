@@ -32,9 +32,10 @@ public class AppiumBase extends AbstractBase {
 
     public void androidCheckAll(List<? extends MobileElement> elements) {
         for (MobileElement anElementList : elements) {
-            if (!Boolean.parseBoolean(anElementList.getAttribute("checked")))
+            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
                 LOG.info("Will try to click:" + elementLogger(anElementList));
-            anElementList.click();
+                anElementList.click();
+            }
         }
     }
 

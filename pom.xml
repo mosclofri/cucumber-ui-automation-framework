@@ -10,7 +10,7 @@
     <version>0.5.0</version>
 
     <modules>
-        <module>testapi</module>
+        <module>appium-testapi</module>
     </modules>
 
     <properties>
@@ -27,14 +27,6 @@
         <github-maven>0.12</github-maven>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -50,14 +42,11 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <version>${github-maven}</version>
                 <configuration>
-                    <message>Maven artifacts for ${project.version}</message>
+                    <message>Maven artifacts for ${maven.build.timestamp}</message>
                     <noJekyll>true</noJekyll>
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
                     <branch>refs/heads/mvn-repo</branch>
                     <merge>true</merge>
-                    <includes>
-                        <include>**/*</include>
-                    </includes>
                     <repositoryName>cucumber-appium-java-framework</repositoryName>
                     <repositoryOwner>mosclofri</repositoryOwner>
                 </configuration>
@@ -72,5 +61,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
 
 </project>

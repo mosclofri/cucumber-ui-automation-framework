@@ -7,7 +7,7 @@
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-appium-java-framework</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.0</version>
+    <version>0.5.3</version>
 
     <modules>
         <module>appium-testapi</module>
@@ -29,6 +29,15 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-version}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>${maven-deploy}</version>

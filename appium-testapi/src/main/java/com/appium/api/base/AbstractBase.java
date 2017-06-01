@@ -5,6 +5,7 @@ import com.appium.api.support.Property;
 import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.junit.AssumptionViolatedException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.support.PageFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -31,8 +33,7 @@ public abstract class AbstractBase {
 
     private static final Logger LOG = Logger.getLogger(AbstractBase.class);
 
-    public final AppiumDriver<? extends MobileElement> driver;
-
+    public AppiumDriver<? extends MobileElement> driver;
     public Scenario scenario;
 
     public AbstractBase(AppiumDriver<? extends MobileElement> driver) {
@@ -42,7 +43,7 @@ public abstract class AbstractBase {
     public String captureLog() {
         LOG.info("Capturing device logs");
         String logType;
-        if (Property.APPIUM_PLATFORM.equalsIgnoreCase("android"))
+        if (APPIUM_PLATFORM.equalsIgnoreCase("android"))
             logType = "logcat";
         else
             logType = "syslog";
@@ -171,6 +172,16 @@ public abstract class AbstractBase {
 
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
+    }
+
+    public void initElementsWithFieldDecorator(Object object) {
+        PageFactory.initElements(
+                new AppiumFieldDecorator(driver, Integer.parseInt(Property.IMPLICIT_WAIT_TIME), TimeUnit.SECONDS), object);
+    }
+
+    public void initElementsWithFieldDecorator(Object object, int timeout) {
+        PageFactory.initElements(
+                new AppiumFieldDecorator(driver, timeout, TimeUnit.SECONDS), object);
     }
 
     public void setDefaultDriverWaitTime() {

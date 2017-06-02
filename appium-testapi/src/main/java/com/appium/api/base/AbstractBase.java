@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,6 +199,23 @@ public abstract class AbstractBase {
         throw new AssumptionViolatedException(reasonToSkip);
     }
 
+    public void switchContextToFirstWEBVIEW() {
+        Set<String> contexts = driver.getContextHandles();
+        for (String context : contexts) {
+            if (context.contains("WEBVIEW")) {
+                LOG.info("Switching context to: " + context);
+                driver.context(context);
+            } else {
+                LOG.info("No WEBVIEW context available, keeping current context");
+            }
+        }
+    }
+
+    public void switchContextToNATIVE() {
+        LOG.info("Switching context to NATIVE_APP");
+        driver.context("NATIVE_APP");
+    }
+
     public byte[] takeScreenShotAsByte() {
         LOG.info("Capturing a screenshot");
         threadWait(0.25);
@@ -214,5 +232,4 @@ public abstract class AbstractBase {
             e.printStackTrace();
         }
     }
-
 }

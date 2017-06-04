@@ -11,9 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-import static com.appium.api.support.Property.IMPLICIT_WAIT_TIME;
-import static org.junit.Assert.assertTrue;
-
 public class AppiumBase extends AbstractBase {
 
     private static final Logger LOG = Logger.getLogger(AppiumBase.class);
@@ -23,7 +20,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void androidAllowGranularPermissions() {
-        LOG.info("Will allow all requested permission");
+        logCucumberStepName();
         setDriverWaitTime(1);
         while (true) {
             try {
@@ -37,17 +34,18 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void androidCheckAll(List<MobileElement> elements) {
+        logCucumberStepName();
         for (MobileElement anElementList : elements) {
             if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
-                LOG.info("Will try to click:" + elementLogger(anElementList));
                 anElementList.click();
             }
         }
     }
 
     public Boolean androidIsAllChecked(List<MobileElement> elements) {
+        logCucumberStepName();
         for (MobileElement anElementList : elements) {
-            if (Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
+            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
                 return false;
             }
         }
@@ -63,99 +61,133 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void click(MobileElement element) {
-        LOG.info("Will try to click:" + elementLogger(element));
+        logCucumberStepName();
         element.click();
     }
 
     public void click(List<MobileElement> element, int index) {
-        LOG.info("Will try to click:" + elementLogger(element, index));
+        logCucumberStepName();
         element.get(index).click();
     }
 
-    private String elementLogger(MobileElement element) {
-        try {
-            if (!element.getText().isEmpty() && element.getText() != null) {
-                return " '" + element.getText() + "' ";
-            } else {
-                return " '" + element.getId() + "' ";
-            }
-        } catch (NoSuchElementException e) {
-            return " 'NoSuchElementException' ";
-        }
-    }
-
-    private String elementLogger(List<? extends MobileElement> element, int index) {
-        try {
-            if (!element.get(index).getText().isEmpty() && element.get(index).getText() != null) {
-                return " '" + element.get(index).getText() + "' with index: '" + index + "' ";
-            } else {
-                return " '" + element.get(index).getClass() + "' with index: '" + index + "' ";
-            }
-        } catch (NoSuchElementException e) {
-            return " 'NoSuchElementException' ";
-        }
-    }
-
     public void hideKeyboard() {
+        logCucumberStepName();
         driver.hideKeyboard();
     }
 
-    public void ifPresentThenClickOnIt(MobileElement element, int durationForLook) {
-        if (isElementPresent(element, durationForLook)) {
-            click(element);
-        }
-    }
-
-    public void ifPresentThenClickOnIt(List<MobileElement> element, int seconds, int index) {
-        if (isElementPresent(element, index, seconds)) {
-            click(element, index);
-        }
-    }
-
     public boolean isContainsText(MobileElement element, String text) {
+        logCucumberStepName();
         try {
             if (element.getText().contains(text)) {
                 return true;
             } else {
-                LOG.info("Given element" + elementLogger(element) + " does not contains: '" + text + "'");
+                return false;
             }
         } catch (NoSuchElementException e) {
-            LOG.warn("Cannot find given element:" + elementLogger(element));
-        }
-        return false;
-    }
-
-    public boolean isElementPresent(MobileElement element) {
-        try {
-            element.getCenter();
-            return true;
-        } catch (NoSuchElementException e) {
-            LOG.warn("Cannot find given element: " + elementLogger(element));
+            logNoSuchElementException(e);
             return false;
         }
     }
 
-    public boolean isElementPresent(MobileElement element, int seconds) {
+    public boolean isContainsText(List<MobileElement> element, int index, String text) {
+        logCucumberStepName();
         try {
-            waitVisibilityOfElement(element, seconds);
+            if (element.get(index).getText().contains(text)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    public boolean isElementNotPresent(MobileElement element, int seconds) {
+        logCucumberStepName();
+        try {
+            new WebDriverWait(driver, seconds)
+                    .until(ExpectedConditions.visibilityOf(element));
+            return false;
+        } catch (NoSuchElementException e) {
+            return true;
+        }
+    }
+
+    public boolean isElementNotPresent(List<MobileElement> element, int index, int seconds) {
+        logCucumberStepName();
+        try {
+            new WebDriverWait(driver, seconds)
+                    .until(ExpectedConditions.visibilityOf(element.get(index)));
+            return false;
+        } catch (NoSuchElementException e) {
+            return true;
+        }
+    }
+
+    public boolean isElementNotPresent(MobileElement element) {
+        logCucumberStepName();
+        try {
+            element.isDisplayed();
+            return false;
+        } catch (NoSuchElementException e) {
+            return true;
+        }
+    }
+
+    public boolean isElementNotPresent(List<MobileElement> element, int index) {
+        logCucumberStepName();
+        try {
+            element.get(index).isDisplayed();
+            return false;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            return true;
+        }
+    }
+
+    public boolean isElementPresent(MobileElement element, int seconds) {
+        logCucumberStepName();
+        try {
+            new WebDriverWait(driver, seconds)
+                    .until(ExpectedConditions.visibilityOf(element));
             return true;
         } catch (NoSuchElementException e) {
-            LOG.warn("Cannot find given element: " + elementLogger(element));
             return false;
         }
     }
 
     public boolean isElementPresent(List<MobileElement> element, int index, int seconds) {
+        logCucumberStepName();
         try {
-            waitVisibilityOfElement(element, index, seconds);
+            new WebDriverWait(driver, seconds)
+                    .until(ExpectedConditions.visibilityOf(element.get(index)));
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    public boolean isElementPresent(MobileElement element) {
+        logCucumberStepName();
+        try {
+            element.isDisplayed();
             return true;
         } catch (NoSuchElementException e) {
-            LOG.warn("Cannot find given element:" + element);
+            return false;
+        }
+    }
+
+    public boolean isElementPresent(List<MobileElement> element, int index) {
+        logCucumberStepName();
+        try {
+            element.get(index).isDisplayed();
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
             return false;
         }
     }
 
     public void navigate(String element) {
+        logCucumberStepName();
         switch (element) {
             case "Back":
                 LOG.info("Navigating back");
@@ -173,32 +205,23 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void restartApp() {
-        LOG.info("Appium will close and relaunch application in test");
+        logCucumberStepName();
         driver.closeApp();
         driver.launchApp();
     }
 
     public void sendKeys(MobileElement element, String text) {
-        LOG.info("Will try to sendKeys '" + text + "' to:" + elementLogger(element));
+        logCucumberStepName();
         element.sendKeys(text);
     }
 
     public void sendKeys(List<MobileElement> element, int index, String text) {
-        LOG.info("Will try to sendKeys '" + text + "' to:" + elementLogger(element, index));
+        logCucumberStepName();
         element.get(index).sendKeys(text);
     }
 
-    public void shouldDisplay(MobileElement element) {
-        LOG.info("Given element:" + elementLogger(element) + "should be displayed");
-        assertTrue(isElementPresent(element, Integer.parseInt(IMPLICIT_WAIT_TIME)));
-    }
-
-    public void shouldNotDisplay(MobileElement element) {
-        LOG.info("Given element:" + elementLogger(element) + "should not be displayed");
-        assertTrue(!isElementPresent(element, Integer.parseInt(IMPLICIT_WAIT_TIME)));
-    }
-
     public void swipeDown() {
+        logCucumberStepName();
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.80);
         int scrollEnd = (int) (dimensions.getHeight() * 0.20);
@@ -206,6 +229,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeLeft() {
+        logCucumberStepName();
         Dimension size = getDriver().manage().window().getSize();
         int startx = (int) (size.width * 0.80);
         int endx = (int) (size.width * 0.20);
@@ -214,6 +238,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeRight() {
+        logCucumberStepName();
         Dimension size = getDriver().manage().window().getSize();
         int endx = (int) (size.width * 0.80);
         int startx = (int) (size.width * 0.20);
@@ -222,6 +247,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeUp() {
+        logCucumberStepName();
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.20);
         int scrollEnd = (int) (dimensions.getHeight() * 0.80);
@@ -229,33 +255,38 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void tap(MobileElement element) {
-        LOG.info("Will try to tap:" + elementLogger(element));
+        logCucumberStepName();
         element.tap(1, 1);
     }
 
     public void tap(List<MobileElement> element, int index) {
-        LOG.info("Will try to tap" + elementLogger(element, index));
+        logCucumberStepName();
         element.get(index).tap(1, 1);
     }
 
     public void type(MobileElement element, String text) {
-        LOG.info("Will try to sendKeys '" + text + "' to:" + elementLogger(element));
+        logCucumberStepName();
         element.setValue(text);
     }
 
     public void type(List<MobileElement> element, int index, String text) {
-        LOG.info("Will try to sendKeys '" + text + "' to:" + elementLogger(element, index));
+        logCucumberStepName();
         element.get(index).setValue(text);
     }
 
-    public void waitVisibilityOfElement(MobileElement element, int seconds) {
-        new WebDriverWait(driver, seconds)
-                .until(ExpectedConditions.visibilityOf(element));
+    private void logNoSuchElementException(NoSuchElementException e) {
+        String errorMessage = e.toString().substring(0, e.toString().indexOf("For documentation") - 1);
+        LOG.error(errorMessage);
     }
 
-    public void waitVisibilityOfElement(List<MobileElement> element, int index, int seconds) {
-        new WebDriverWait(driver, seconds)
-                .until(ExpectedConditions.visibilityOf(element.get(index)));
+    private void logCucumberStepName() {
+        StackTraceElement stackTraceElements = Thread.currentThread().getStackTrace()[3];
+        String frameworkMethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        String classNameWithPackage = stackTraceElements.getClassName();
+        String className = classNameWithPackage.substring(classNameWithPackage.lastIndexOf(".") + 1, classNameWithPackage.length());
+        String methodName = stackTraceElements.getMethodName();
+        int lineNumber = stackTraceElements.getLineNumber();
+        LOG.info(className + ":" + lineNumber + ":" + methodName + ":" + frameworkMethodName);
     }
 
 }

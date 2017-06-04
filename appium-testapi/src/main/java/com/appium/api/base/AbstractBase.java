@@ -16,7 +16,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

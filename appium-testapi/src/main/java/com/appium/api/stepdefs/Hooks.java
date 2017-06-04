@@ -7,7 +7,6 @@ import cucumber.api.java.Before;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Hooks {
         }
         if (appiumBase.scenario.isFailed()) {
             appiumBase.scenario.embed(appiumBase.takeScreenShotAsByte(), "image/png");
-            appiumBase.scenario.embed(appiumBase.captureLog().getBytes(StandardCharsets.UTF_8), "text/html");
+            //appiumBase.scenario.embed(appiumBase.captureLog().getBytes(StandardCharsets.UTF_8), "text/html");
         }
     }
 

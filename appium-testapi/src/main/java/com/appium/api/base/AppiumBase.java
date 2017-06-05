@@ -2,15 +2,20 @@ package com.appium.api.base;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@Scope("cucumber-glue")
 public class AppiumBase extends AbstractBase {
 
     private static final Logger LOG = Logger.getLogger(AppiumBase.class);
@@ -20,12 +25,11 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void androidAllowGranularPermissions() {
-        logCucumberStepName();
         setDriverWaitTime(1);
         while (true) {
             try {
                 MobileElement element = getDriver().findElement(By.xpath("//android.widget.Button[@resource-id='com.android.packageinstaller:id/permission_allow_button']"));
-                click(element);
+                element.click();
             } catch (NoSuchElementException e) {
                 break;
             }
@@ -34,7 +38,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void androidCheckAll(List<MobileElement> elements) {
-        logCucumberStepName();
         for (MobileElement anElementList : elements) {
             if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
                 anElementList.click();
@@ -43,7 +46,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public Boolean androidIsAllChecked(List<MobileElement> elements) {
-        logCucumberStepName();
         for (MobileElement anElementList : elements) {
             if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
                 return false;
@@ -60,50 +62,19 @@ public class AppiumBase extends AbstractBase {
         return Boolean.parseBoolean(element.get(index).getAttribute("checked"));
     }
 
-    public void click(MobileElement element) {
-        logCucumberStepName();
-        element.click();
-    }
-
-    public void click(List<MobileElement> element, int index) {
-        logCucumberStepName();
-        element.get(index).click();
-    }
-
     public void hideKeyboard() {
-        logCucumberStepName();
         driver.hideKeyboard();
     }
 
     public boolean isContainsText(MobileElement element, String text) {
-        logCucumberStepName();
-        try {
-            if (element.getText().contains(text)) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (NoSuchElementException e) {
-            logNoSuchElementException(e);
-            return false;
-        }
+        return element.getText().contains(text);
     }
 
     public boolean isContainsText(List<MobileElement> element, int index, String text) {
-        logCucumberStepName();
-        try {
-            if (element.get(index).getText().contains(text)) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
-            return false;
-        }
+        return element.get(index).getText().contains(text);
     }
 
     public boolean isElementNotPresent(MobileElement element, int seconds) {
-        logCucumberStepName();
         try {
             new WebDriverWait(driver, seconds)
                     .until(ExpectedConditions.visibilityOf(element));
@@ -114,7 +85,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementNotPresent(List<MobileElement> element, int index, int seconds) {
-        logCucumberStepName();
         try {
             new WebDriverWait(driver, seconds)
                     .until(ExpectedConditions.visibilityOf(element.get(index)));
@@ -125,7 +95,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementNotPresent(MobileElement element) {
-        logCucumberStepName();
         try {
             element.isDisplayed();
             return false;
@@ -135,7 +104,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementNotPresent(List<MobileElement> element, int index) {
-        logCucumberStepName();
         try {
             element.get(index).isDisplayed();
             return false;
@@ -145,7 +113,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementPresent(MobileElement element, int seconds) {
-        logCucumberStepName();
         try {
             new WebDriverWait(driver, seconds)
                     .until(ExpectedConditions.visibilityOf(element));
@@ -156,7 +123,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementPresent(List<MobileElement> element, int index, int seconds) {
-        logCucumberStepName();
         try {
             new WebDriverWait(driver, seconds)
                     .until(ExpectedConditions.visibilityOf(element.get(index)));
@@ -167,7 +133,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementPresent(MobileElement element) {
-        logCucumberStepName();
         try {
             element.isDisplayed();
             return true;
@@ -177,7 +142,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public boolean isElementPresent(List<MobileElement> element, int index) {
-        logCucumberStepName();
         try {
             element.get(index).isDisplayed();
             return true;
@@ -186,8 +150,14 @@ public class AppiumBase extends AbstractBase {
         }
     }
 
+    public void logCucumberStep() {
+        StackTraceElement stackTraceElements = Thread.currentThread().getStackTrace()[2];
+        String methodName = StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(stackTraceElements.getMethodName()), ' ');
+        LOG.info(methodName);
+    }
+
     public void navigate(String element) {
-        logCucumberStepName();
+
         switch (element) {
             case "Back":
                 LOG.info("Navigating back");
@@ -205,23 +175,12 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void restartApp() {
-        logCucumberStepName();
         driver.closeApp();
         driver.launchApp();
     }
 
-    public void sendKeys(MobileElement element, String text) {
-        logCucumberStepName();
-        element.sendKeys(text);
-    }
-
-    public void sendKeys(List<MobileElement> element, int index, String text) {
-        logCucumberStepName();
-        element.get(index).sendKeys(text);
-    }
-
     public void swipeDown() {
-        logCucumberStepName();
+
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.80);
         int scrollEnd = (int) (dimensions.getHeight() * 0.20);
@@ -229,7 +188,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeLeft() {
-        logCucumberStepName();
+
         Dimension size = getDriver().manage().window().getSize();
         int startx = (int) (size.width * 0.80);
         int endx = (int) (size.width * 0.20);
@@ -238,7 +197,7 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeRight() {
-        logCucumberStepName();
+
         Dimension size = getDriver().manage().window().getSize();
         int endx = (int) (size.width * 0.80);
         int startx = (int) (size.width * 0.20);
@@ -247,46 +206,11 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeUp() {
-        logCucumberStepName();
+
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.20);
         int scrollEnd = (int) (dimensions.getHeight() * 0.80);
         getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
-    }
-
-    public void tap(MobileElement element) {
-        logCucumberStepName();
-        element.tap(1, 1);
-    }
-
-    public void tap(List<MobileElement> element, int index) {
-        logCucumberStepName();
-        element.get(index).tap(1, 1);
-    }
-
-    public void type(MobileElement element, String text) {
-        logCucumberStepName();
-        element.setValue(text);
-    }
-
-    public void type(List<MobileElement> element, int index, String text) {
-        logCucumberStepName();
-        element.get(index).setValue(text);
-    }
-
-    private void logNoSuchElementException(NoSuchElementException e) {
-        String errorMessage = e.toString().substring(0, e.toString().indexOf("For documentation") - 1);
-        LOG.error(errorMessage);
-    }
-
-    private void logCucumberStepName() {
-        StackTraceElement stackTraceElements = Thread.currentThread().getStackTrace()[3];
-        String frameworkMethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
-        String classNameWithPackage = stackTraceElements.getClassName();
-        String className = classNameWithPackage.substring(classNameWithPackage.lastIndexOf(".") + 1, classNameWithPackage.length());
-        String methodName = stackTraceElements.getMethodName();
-        int lineNumber = stackTraceElements.getLineNumber();
-        LOG.info(className + ":" + lineNumber + ":" + methodName + ":" + frameworkMethodName);
     }
 
 }

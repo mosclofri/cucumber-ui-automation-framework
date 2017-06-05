@@ -7,7 +7,7 @@
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-appium-java-framework</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.3</version>
+    <version>0.5.5</version>
 
     <modules>
         <module>appium-testapi</module>

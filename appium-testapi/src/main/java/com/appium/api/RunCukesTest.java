@@ -24,8 +24,7 @@ public class RunCukesTest {
     @BeforeClass
     public static void startAppium() {
 
-
-        if (APPIUM_PLATFORM.equalsIgnoreCase("android") && DEVICE_NAME.contains("qa-devicefarm")) {
+        if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android") && DEVICE_NAME.toString().contains("qa-devicefarm")) {
             LOG.info("### Trying ADB Connect To QA Farm Device ###");
             try {
                 Runtime rt = Runtime.getRuntime();

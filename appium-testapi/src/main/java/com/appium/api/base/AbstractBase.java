@@ -1,7 +1,6 @@
 package com.appium.api.base;
 
 import com.appium.api.support.ImageCompare;
-import com.appium.api.support.Property;
 import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -44,7 +43,7 @@ public abstract class AbstractBase {
     public String captureLog() {
         LOG.info("Capturing device logs");
         String logType;
-        if (APPIUM_PLATFORM.equalsIgnoreCase("android"))
+        if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android"))
             logType = "logcat";
         else
             logType = "syslog";
@@ -70,18 +69,18 @@ public abstract class AbstractBase {
         File screenShot;
         String deviceName = null;
 
-        if (COMPARE_IMAGE.matches("true|record")) {
-            if (APPIUM_PLATFORM.equalsIgnoreCase("android")) {
-                deviceName = executeShellReturnStringResult("adb -s " + DEVICE_NAME + " shell getprop ro.product.model");
+        if (COMPARE_IMAGE.toString().matches("true|record")) {
+            if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android")) {
+                deviceName = executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.product.model");
             } else {
-                deviceName = DEVICE_NAME;
+                deviceName = DEVICE_NAME.toString();
             }
             screenShot = new File("./src/test/resources/expected_images/" + deviceName + "/" + expectedImage + ".png");
         } else {
             return;
         }
 
-        if (COMPARE_IMAGE.matches("true")) {
+        if (COMPARE_IMAGE.toString().matches("true")) {
             if (!screenShot.exists()) {
                 LOG.warn("There is no existing image for : " + expectedImage + ".png for device: " + deviceName);
                 return;
@@ -128,7 +127,7 @@ public abstract class AbstractBase {
             }
         }
 
-        if (COMPARE_IMAGE.matches("record")) {
+        if (COMPARE_IMAGE.toString().matches("record")) {
             threadWait(0.25);
             File deviceScreen = driver.getScreenshotAs(OutputType.FILE);
             if (!screenShot.exists()) {
@@ -160,7 +159,7 @@ public abstract class AbstractBase {
     }
 
     public String getAndroidSDKVersion() {
-        return executeShellReturnStringResult("adb -s " + DEVICE_NAME + " shell getprop ro.build.version.sdk");
+        return executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.build.version.sdk");
     }
 
     public AppiumDriver<? extends MobileElement> getDriver() {
@@ -177,7 +176,7 @@ public abstract class AbstractBase {
 
     public void initElementsWithFieldDecorator(Object object) {
         PageFactory.initElements(
-                new AppiumFieldDecorator(driver, Integer.parseInt(Property.IMPLICIT_WAIT_TIME), TimeUnit.SECONDS), object);
+                new AppiumFieldDecorator(driver, Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS), object);
     }
 
     public void initElementsWithFieldDecorator(Object object, int timeout) {
@@ -186,7 +185,7 @@ public abstract class AbstractBase {
     }
 
     public void setDefaultDriverWaitTime() {
-        setDriverWaitTime(Integer.parseInt(IMPLICIT_WAIT_TIME));
+        setDriverWaitTime(Integer.parseInt(IMPLICIT_WAIT.toString()));
     }
 
     public void setDriverWaitTime(int duration) {

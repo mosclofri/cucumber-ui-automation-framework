@@ -22,7 +22,7 @@ final class TestCapabilities {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         try {
             capabilities.setCapability(MobileCapabilityType.APP,
-                    new File(URLDecoder.decode(ClassLoader.getSystemResource((APP_FILE)).getFile(),
+                    new File(URLDecoder.decode(ClassLoader.getSystemResource((APP_FILE.toString())).getFile(),
                             StandardCharsets.UTF_8.toString())).getAbsolutePath());
         } catch (NullPointerException e) {
             LOG.error("Cannot find given application file" + e);
@@ -32,8 +32,8 @@ final class TestCapabilities {
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, APPIUM_PLATFORM);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
         capabilities.setCapability(MobileCapabilityType.UDID, UUID);
-        capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET));
-        switch (APPIUM_PLATFORM.toUpperCase()) {
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
+        switch (APPIUM_PLATFORM.toString().toUpperCase()) {
             case "IOS":
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
                 break;

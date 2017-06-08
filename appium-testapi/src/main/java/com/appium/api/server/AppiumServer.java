@@ -12,8 +12,8 @@ public final class AppiumServer {
     private final static AppiumDriverLocalService service;
 
     static {
-        service = buildService(new AppiumServiceBuilder().withIPAddress(APPIUM_HOST).usingPort(Integer.parseInt(APPIUM_PORT))
-                .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG_LEVEL));
+        service = buildService(new AppiumServiceBuilder().withIPAddress(APPIUM_HOST.toString()).usingPort(Integer.parseInt(APPIUM_PORT.toString()))
+                .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG_LEVEL.toString()));
     }
 
     public static void startAppiumServer() {

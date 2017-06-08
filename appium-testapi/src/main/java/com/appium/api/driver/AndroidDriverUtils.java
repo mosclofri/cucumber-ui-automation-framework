@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.appium.api.driver.TestCapabilities.getDesiredCapabilities;
 import static com.appium.api.driver.TestCapabilities.getUrl;
-import static com.appium.api.support.Property.IMPLICIT_WAIT_TIME;
+import static com.appium.api.support.Property.IMPLICIT_WAIT;
 
 @Component
 @Profile("Android")
@@ -21,7 +21,7 @@ public class AndroidDriverUtils {
     @Scope("cucumber-glue")
     private AndroidDriver<? extends MobileElement> getDriver() {
         AndroidDriver<? extends MobileElement> driver = new AndroidDriver<>(getUrl(), getDesiredCapabilities());
-        driver.manage().timeouts().implicitlyWait(Integer.parseInt(IMPLICIT_WAIT_TIME), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS);
         return driver;
     }
 

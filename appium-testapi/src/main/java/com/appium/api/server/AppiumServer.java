@@ -13,7 +13,7 @@ public final class AppiumServer {
 
     static {
         service = buildService(new AppiumServiceBuilder().withIPAddress(APPIUM_HOST.toString()).usingPort(Integer.parseInt(APPIUM_PORT.toString()))
-                .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG_LEVEL.toString()));
+                .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG.toString()));
     }
 
     public static void startAppiumServer() {

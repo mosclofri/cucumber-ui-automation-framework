@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.appium.api.support.Property.TESTCASE_URL;
+import static com.appium.api.support.Property.TESTRAIL_URL;
 
 public class Hooks {
 
@@ -25,7 +25,7 @@ public class Hooks {
         LOG.info("### Ending scenario: " + appiumBase.getScenario().getName() + " ###");
         List<String> caseList = getScenariosStartWithCaseIds(appiumBase.scenario.getSourceTagNames());
         for (String currentTag : caseList) {
-            appiumBase.scenario.write("<a href=\"" + TESTCASE_URL + currentTag + "\"> Test Scenario: C" + currentTag + "</a>");
+            appiumBase.scenario.write("<a href=\"" + TESTRAIL_URL + currentTag + "\"> Test Scenario: C" + currentTag + "</a>");
         }
         if (appiumBase.scenario.isFailed()) {
             appiumBase.scenario.embed(appiumBase.takeScreenShotAsByte(), "image/png");

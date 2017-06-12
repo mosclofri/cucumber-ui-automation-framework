@@ -29,11 +29,11 @@ final class TestCapabilities {
         } catch (UnsupportedEncodingException e) {
             LOG.warn(e);
         }
-        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, APPIUM_PLATFORM);
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
-        capabilities.setCapability(MobileCapabilityType.UDID, UUID);
+        capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
-        switch (APPIUM_PLATFORM.toString().toUpperCase()) {
+        switch (PLATFORM_NAME.toString().toUpperCase()) {
             case "IOS":
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
                 break;
@@ -42,7 +42,7 @@ final class TestCapabilities {
                 capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true);
                 break;
             default:
-                LOG.error("Current test platform is not supported: " + APPIUM_PLATFORM);
+                LOG.error("Current test platform is not supported: " + PLATFORM_NAME);
         }
         return capabilities;
     }

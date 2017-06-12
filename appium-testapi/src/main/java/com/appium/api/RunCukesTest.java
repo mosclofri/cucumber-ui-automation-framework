@@ -24,7 +24,7 @@ public class RunCukesTest {
     @BeforeClass
     public static void startAppium() {
 
-        if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android") && DEVICE_NAME.toString().contains("qa-devicefarm")) {
+        if (PLATFORM_NAME.toString().equalsIgnoreCase("android") && DEVICE_NAME.toString().contains("qa-devicefarm")) {
             LOG.info("### Trying ADB Connect To QA Farm Device ###");
             try {
                 Runtime rt = Runtime.getRuntime();
@@ -35,8 +35,8 @@ public class RunCukesTest {
         }
 
         LOG.info("### Starting Appium Server ####");
-        LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG_LEVEL);
-        LOG.info("Platform: " + APPIUM_PLATFORM + " & Test Device: " + DEVICE_NAME);
+        LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG);
+        LOG.info("Platform: " + PLATFORM_NAME + " & Test Device: " + DEVICE_NAME);
         LOG.info("Application In Test: " + APP_FILE);
         LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);
         startAppiumServer();

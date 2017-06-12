@@ -43,7 +43,7 @@ public abstract class AbstractBase {
     public String captureLog() {
         LOG.info("Capturing device logs");
         String logType;
-        if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android"))
+        if (PLATFORM_NAME.toString().equalsIgnoreCase("android"))
             logType = "logcat";
         else
             logType = "syslog";
@@ -70,7 +70,7 @@ public abstract class AbstractBase {
         String deviceName = null;
 
         if (COMPARE_IMAGE.toString().matches("true|record")) {
-            if (APPIUM_PLATFORM.toString().equalsIgnoreCase("android")) {
+            if (PLATFORM_NAME.toString().equalsIgnoreCase("android")) {
                 deviceName = executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.product.model");
             } else {
                 deviceName = DEVICE_NAME.toString();

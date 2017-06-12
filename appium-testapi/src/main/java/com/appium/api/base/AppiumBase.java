@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 @Component
 @Scope("cucumber-glue")
 public class AppiumBase extends AbstractBase {
@@ -179,8 +181,39 @@ public class AppiumBase extends AbstractBase {
         driver.launchApp();
     }
 
-    public void swipeDown() {
+    public void shouldDisplay(MobileElement element, int seconds) {
+        assertTrue(isElementPresent(element, seconds));
+    }
 
+    public void shouldDisplay(List<MobileElement> element, int index, int seconds) {
+        assertTrue(isElementPresent(element, index, seconds));
+    }
+
+    public void shouldDisplay(MobileElement element) {
+        assertTrue(isElementPresent(element));
+    }
+
+    public void shouldDisplay(List<MobileElement> element, int index) {
+        assertTrue(isElementPresent(element, index));
+    }
+
+    public void shouldNotDisplay(MobileElement element, int seconds) {
+        assertTrue(isElementNotPresent(element, seconds));
+    }
+
+    public void shouldNotDisplay(List<MobileElement> element, int index, int seconds) {
+        assertTrue(isElementNotPresent(element, index, seconds));
+    }
+
+    public void shouldNotDisplay(MobileElement element) {
+        assertTrue(isElementNotPresent(element));
+    }
+
+    public void shouldNotDisplay(List<MobileElement> element, int index) {
+        assertTrue(isElementNotPresent(element, index));
+    }
+
+    public void swipeDown() {
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.80);
         int scrollEnd = (int) (dimensions.getHeight() * 0.20);
@@ -188,7 +221,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeLeft() {
-
         Dimension size = getDriver().manage().window().getSize();
         int startx = (int) (size.width * 0.80);
         int endx = (int) (size.width * 0.20);
@@ -197,7 +229,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeRight() {
-
         Dimension size = getDriver().manage().window().getSize();
         int endx = (int) (size.width * 0.80);
         int startx = (int) (size.width * 0.20);
@@ -206,7 +237,6 @@ public class AppiumBase extends AbstractBase {
     }
 
     public void swipeUp() {
-
         Dimension dimensions = getDriver().manage().window().getSize();
         int scrollStart = (int) (dimensions.getHeight() * 0.20);
         int scrollEnd = (int) (dimensions.getHeight() * 0.80);

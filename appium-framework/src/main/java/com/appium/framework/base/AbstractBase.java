@@ -1,6 +1,6 @@
-package com.appium.api.base;
+package com.appium.framework.base;
 
-import com.appium.api.support.ImageCompare;
+import com.appium.framework.support.ImageCompare;
 import cucumber.api.Scenario;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.appium.api.support.Property.*;
+import static com.appium.framework.support.Property.*;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractBase {

@@ -1,6 +1,6 @@
-package com.appium.api.stepdefs;
+package com.appium.framework.stepdefs;
 
-import com.appium.api.base.AppiumBase;
+import com.appium.framework.base.AppiumBase;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 

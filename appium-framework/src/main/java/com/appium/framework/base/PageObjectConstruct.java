@@ -1,4 +1,4 @@
-package com.appium.api.base;
+package com.appium.framework.base;
 
 import io.appium.java_client.AppiumDriver;
 import org.springframework.beans.factory.annotation.Autowired;

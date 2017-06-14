@@ -1,4 +1,4 @@
-package com.appium.api;
+package com.appium.framework;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -7,15 +7,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import static com.appium.api.server.AppiumServer.startAppiumServer;
-import static com.appium.api.server.AppiumServer.stopAppiumServer;
-import static com.appium.api.support.Property.*;
+import static com.appium.framework.server.AppiumServer.startAppiumServer;
+import static com.appium.framework.server.AppiumServer.stopAppiumServer;
+import static com.appium.framework.support.Property.*;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
-        glue = {"com.appium.test.stepdefs", "com.appium.api.stepdefs"},
+        glue = {"com.appium.test.stepdefs", "com.appium.framework.stepdefs"},
         tags = {"~@ignore"})
 public class RunCukesTest {
 

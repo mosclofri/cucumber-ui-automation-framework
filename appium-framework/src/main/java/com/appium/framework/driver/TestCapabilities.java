@@ -1,4 +1,4 @@
-package com.appium.api.driver;
+package com.appium.framework.driver;
 
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -12,7 +12,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-import static com.appium.api.support.Property.*;
+import static com.appium.framework.support.Property.*;
 
 final class TestCapabilities {
 

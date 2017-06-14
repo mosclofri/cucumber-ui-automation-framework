@@ -1,6 +1,6 @@
-package com.appium.api.stepdefs;
+package com.appium.framework.stepdefs;
 
-import com.appium.api.base.AppiumBase;
+import com.appium.framework.base.AppiumBase;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.appium.api.support.Property.TESTRAIL_URL;
+import static com.appium.framework.support.Property.TESTRAIL_URL;
 
 public class Hooks {
 

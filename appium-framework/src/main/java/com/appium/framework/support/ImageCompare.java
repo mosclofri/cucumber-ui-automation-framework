@@ -1,4 +1,4 @@
-package com.appium.api.support;
+package com.appium.framework.support;
 
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;

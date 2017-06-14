@@ -1,4 +1,4 @@
-package com.appium.api.driver;
+package com.appium.framework.driver;
 
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.appium.api.driver.TestCapabilities.getDesiredCapabilities;
-import static com.appium.api.driver.TestCapabilities.getUrl;
-import static com.appium.api.support.Property.IMPLICIT_WAIT;
+import static com.appium.framework.driver.TestCapabilities.getDesiredCapabilities;
+import static com.appium.framework.driver.TestCapabilities.getUrl;
+import static com.appium.framework.support.Property.IMPLICIT_WAIT;
 
 @Component
 @Profile("Android")

@@ -1,10 +1,10 @@
-package com.appium.api.server;
+package com.appium.framework.server;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
-import static com.appium.api.support.Property.*;
+import static com.appium.framework.support.Property.*;
 import static io.appium.java_client.service.local.AppiumDriverLocalService.buildService;
 
 public final class AppiumServer {

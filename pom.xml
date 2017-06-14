@@ -6,25 +6,24 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-appium-java-framework</artifactId>
+    <version>0.6.0</version>
     <packaging>pom</packaging>
-    <version>0.5.6</version>
 
     <modules>
-        <module>appium-testapi</module>
+        <module>appium-framework</module>
     </modules>
 
     <properties>
-        <github.global.server>github</github.global.server>
-        <compiler-version>3.3</compiler-version>
         <appium-java-version>4.1.2</appium-java-version>
-        <cucumber-version>1.2.5</cucumber-version>
-        <spring-version>4.3.8.RELEASE</spring-version>
-        <log4j-version>1.2.17</log4j-version>
-        <surefire-version>2.20</surefire-version>
         <compiler-version>3.6.0</compiler-version>
-        <reporting-version>3.6.0</reporting-version>
-        <maven-deploy>2.8.2</maven-deploy>
+        <cucumber-version>1.2.5</cucumber-version>
+        <log4j-version>1.2.17</log4j-version>
+        <reporting-version>3.8.0</reporting-version>
+        <spring-version>4.3.8.RELEASE</spring-version>
+        <surefire-version>2.20</surefire-version>
         <github-maven>0.12</github-maven>
+        <maven-deploy>2.8.2</maven-deploy>
+        <github.global.server>github</github.global.server>
     </properties>
 
     <build>

@@ -8,9 +8,9 @@ import javax.annotation.PostConstruct;
 public class PageObjectConstruct {
 
     @Autowired
-    private AppiumBase appiumBase;
+    public AppiumBase appiumBase;
 
-    public AppiumBase getAppium() {
+    public AppiumBase gelHelper() {
         return appiumBase;
     }
 

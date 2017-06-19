@@ -1,7 +1,8 @@
-# cucumber-appium-java-framework
+# cucumber-ui-automation-framework
 
- The framework was designed to help you to get started with Appium quickly. 
- Offers multi-platform support for your cross-platform applications with a single code.
+ The framework was designed to help you to get started with Appium and Selenium quickly. 
+ Offers multi-platform support for your cross-platform applications with a single code and
+ standardization for all ui automation tests.
  It is mavenized and jenkins friendly.
  
 ## Running Your Tests
@@ -32,6 +33,7 @@ run `appium-doctor` to ensure your system is set up properly
  * Spring
   
 ### Highlights:
+ * Selenium and Appium Support
  * Page object pattern
  * Mavenized
  * Behaviour driven development
@@ -40,7 +42,6 @@ run `appium-doctor` to ensure your system is set up properly
  * Business readable HTML test results
  
 ### Future Work:
- * Selenium support
  * Network mocking module
  * Improved logging to replace appium built-in log output
  * Parallel and feature parallel test execution

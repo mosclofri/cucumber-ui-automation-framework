@@ -1,71 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.mosclofri</groupId>
-    <artifactId>cucumber-appium-java-framework</artifactId>
-    <version>0.6.0</version>
+    <artifactId>cucumber-ui-automation-framework</artifactId>
+    <version>0.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>appium-framework</module>
+        <module>java-appium-framework</module>
+        <module>java-selenium-framework</module>
+        <module>java-support-framework</module>
     </modules>
 
     <properties>
         <appium-java-version>4.1.2</appium-java-version>
+        <commons-io-version>2.5</commons-io-version>
+        <commons-lang3-version>3.5</commons-lang3-version>
         <compiler-version>3.6.0</compiler-version>
         <cucumber-version>1.2.5</cucumber-version>
+        <deploy-plugin-version>2.8.2</deploy-plugin-version>
+        <drivermanager-version>1.6.2</drivermanager-version>
+        <github-maven-version>0.12</github-maven-version>
+        <github.global.server>github</github.global.server>
         <log4j-version>1.2.17</log4j-version>
+        <release-plugin-version>2.5.3</release-plugin-version>
         <reporting-version>3.8.0</reporting-version>
+        <selenium-java-version>3.3.1</selenium-java-version>
+        <selenium-support-version>2.53.1</selenium-support-version>
+        <sortpom-plugin-version>2.8.0</sortpom-plugin-version>
         <spring-version>4.3.8.RELEASE</spring-version>
         <surefire-version>2.20</surefire-version>
-        <github-maven>0.12</github-maven>
-        <maven-deploy>2.8.2</maven-deploy>
-        <github.global.server>github</github.global.server>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.ekryd.sortpom</groupId>
+                    <artifactId>sortpom-maven-plugin</artifactId>
+                    <version>${sortpom-plugin-version}</version>
+                    <configuration>
+                        <predefinedSortOrder>custom_1</predefinedSortOrder>
+                        <lineSeparator>\n</lineSeparator>
+                        <nrOfIndentSpace>4</nrOfIndentSpace>
+                        <sortProperties>true</sortProperties>
+                        <keepBlankLines>true</keepBlankLines>
+                        <sortModules>true</sortModules>
+                        <createBackupFile>false</createBackupFile>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>sort</goal>
+                            </goals>
+                            <phase>verify</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler-version}</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${release-plugin-version}</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>net.masterthought</groupId>
+                    <artifactId>maven-cucumber-reporting</artifactId>
+                    <version>${reporting-version}</version>
+                    <executions>
+                        <execution>
+                            <id>execution</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <phase>test</phase>
+                            <configuration>
+                                <projectName>${artifactId}</projectName>
+                                <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
+                                <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
+                                <parallelTesting>false</parallelTesting>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${deploy-plugin-version}</version>
+                    <configuration>
+                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>${github-maven-version}</version>
+                    <configuration>
+                        <message>Maven artifacts for ${maven.build.timestamp}</message>
+                        <noJekyll>true</noJekyll>
+                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+                        <branch>refs/heads/mvn-repo</branch>
+                        <merge>true</merge>
+                        <repositoryName>cucumber-ui-automation-framework</repositoryName>
+                        <repositoryOwner>mosclofri</repositoryOwner>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <phase>deploy</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+                <groupId>com.github.ekryd.sortpom</groupId>
+                <artifactId>sortpom-maven-plugin</artifactId>
+                <inherited>true</inherited>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler-version}</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
+                <inherited>true</inherited>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+            <plugin>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <inherited>true</inherited>
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy}</version>
-                <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo
-                    </altDeploymentRepository>
-                </configuration>
+                <inherited>false</inherited>
             </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>${github-maven}</version>
-                <configuration>
-                    <message>Maven artifacts for ${maven.build.timestamp}</message>
-                    <noJekyll>true</noJekyll>
-                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-                    <branch>refs/heads/mvn-repo</branch>
-                    <merge>true</merge>
-                    <repositoryName>cucumber-appium-java-framework</repositoryName>
-                    <repositoryOwner>mosclofri</repositoryOwner>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
+                <inherited>true</inherited>
             </plugin>
         </plugins>
     </build>

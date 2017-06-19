@@ -1,10 +1,11 @@
-package com.appium.framework.server;
+package com.appium.framework.core;
 
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 
-import static com.support.framework.support.Property.*;
+import static com.support.framework.support.Property.APPIUM_LOG;
+import static com.support.framework.support.Util.getURLPort;
 import static io.appium.java_client.service.local.AppiumDriverLocalService.buildService;
 
 public final class AppiumServer {
@@ -12,15 +13,16 @@ public final class AppiumServer {
     private final static AppiumDriverLocalService service;
 
     static {
-        service = buildService(new AppiumServiceBuilder().withIPAddress(APPIUM_HOST.toString()).usingPort(Integer.parseInt(APPIUM_PORT.toString()))
+        service = buildService(new AppiumServiceBuilder().withIPAddress(getURLPort("url"))
+                .usingPort(Integer.parseInt(getURLPort("port")))
                 .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG.toString()));
     }
 
-    public static void startAppiumServer() {
+    static void startAppiumServer() {
         service.start();
     }
 
-    public static void stopAppiumServer() {
+    static void stopAppiumServer() {
         if (service.isRunning()) {
             service.stop();
         }

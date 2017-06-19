@@ -10,12 +10,12 @@ public class PageObjectConstruct {
     @Autowired
     public BaseAppium appiumBase;
 
-    public BaseAppium gelHelper() {
-        return appiumBase;
-    }
-
     public AppiumDriver getDriver() {
         return appiumBase.getDriver();
+    }
+
+    public BaseAppium getHelper() {
+        return appiumBase;
     }
 
     @PostConstruct

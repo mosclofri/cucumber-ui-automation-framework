@@ -16,7 +16,7 @@ public class Hooks {
 
     @After
     public void after() {
-        baseSelenium.hookAfter(null, baseSelenium.takeScreenShotAsByte());
+        baseSelenium.hookAfter();
     }
 
     @Before

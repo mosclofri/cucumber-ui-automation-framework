@@ -2,23 +2,28 @@ package com.support.framework.support;
 
 import org.junit.Assert;
 
+import java.util.Optional;
+
 public enum Property {
 
-    PLATFORM_NAME(System.getProperty("spring.profiles.active")),
-    APPIUM_HOST(System.getProperty("appium.host")),
-    APPIUM_PORT(System.getProperty("appium.port")),
-    DEVICE_NAME(System.getProperty("device.name")),
-    APP_FILE(System.getProperty("app.file")),
-    IMPLICIT_WAIT(System.getProperty("implicit.wait")),
-    COMPARE_IMAGE(System.getProperty("compare.image")),
-    APPIUM_LOG(System.getProperty("appium.log")),
-    NO_RESET(System.getProperty("no.reset")),
-
-    BROWSER_NAME(System.getProperty("browser.name")),
-    BASE_URL(System.getProperty("base.url")),
-    GRID_USE(System.getProperty("grid.use")),
-    GRID_URL(System.getProperty("grid.url")),
+    PLATFORM_NAME(System.getProperty("platform.name")),
     PLATFORM_VERSION(System.getProperty("platform.version")),
+    IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("3")),
+    COMPARE_IMAGE(Optional.ofNullable(System.getProperty("compare.image")).orElse("false")),
+
+    //Appium Specific
+    APP_FILE(System.getProperty("app.file")),
+    DEVICE_NAME(System.getProperty("device.name")),
+    APPIUM_URL(Optional.ofNullable(System.getProperty("appium.url")).orElse("127.0.0.1:4799")),
+    NO_RESET(Optional.ofNullable(System.getProperty("no.reset")).orElse("true")),
+    APPIUM_LOG(Optional.ofNullable(System.getProperty("appium.log")).orElse("warn")),
+
+    //Selenium Specific
+    BROWSER_NAME(Optional.ofNullable(System.getProperty("browser.name")).orElse("Chrome")),
+    BASE_URL(System.getProperty("base.url")),
+    GRID_URL(System.getProperty("grid.url")),
+    GRID_USE(System.getProperty("grid.use")),
+    SELENIUM_LOG(Optional.ofNullable(System.getProperty("selenium.log")).orElse("WARNING")),
 
     TESTRAIL_URL(System.getProperty("testrail.url"));
 
@@ -30,8 +35,8 @@ public enum Property {
 
     @Override
     public String toString() {
-        if (value.isEmpty()) {
-            Assert.fail("Check your driver in your pom.xml !!!");
+        if (value == null || value.length() == 0) {
+            Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
         }
         return value;
     }

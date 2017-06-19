@@ -13,6 +13,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -157,15 +158,18 @@ public abstract class AbstractBase<T extends WebElement> {
         this.scenario = scenario;
     }
 
-    public void hookAfter(String log, byte[] bytesScreen) {
+    public void hookAfter() {
+        LOG.info("### " + scenario.getStatus().toUpperCase() + " ###");
         LOG.info("### Ending scenario: " + scenario.getName() + " ###");
         List<String> caseList = getScenariosStartWithCaseIds(scenario.getSourceTagNames());
         for (String currentTag : caseList) {
             scenario.write("<a href=\"" + TESTRAIL_URL + currentTag + "\"> Test Scenario: C" + currentTag + "</a>");
         }
-        if (scenario.isFailed() && !PLATFORM_NAME.toString().equalsIgnoreCase("web")) {
-            scenario.embed(bytesScreen, "image/png");
-            scenario.embed(log.getBytes(StandardCharsets.UTF_8), "text/html");
+        if (scenario.isFailed()) {
+            scenario.embed(takeScreenShotAsByte(), "image/png");
+            if (!PLATFORM_NAME.toString().equalsIgnoreCase("web")) {
+                scenario.embed(captureLog().getBytes(StandardCharsets.UTF_8), "text/html");
+            }
         }
     }
 
@@ -343,6 +347,21 @@ public abstract class AbstractBase<T extends WebElement> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private String captureLog() {
+        LOG.info("Capturing device logs");
+        String logType;
+        if (PLATFORM_NAME.toString().equalsIgnoreCase("android"))
+            logType = "logcat";
+        else
+            logType = "syslog";
+        StringBuilder deviceLog = new StringBuilder();
+        List<LogEntry> logEntries = driver.manage().logs().get(logType).getAll();
+        for (LogEntry logLine : logEntries) {
+            deviceLog.append(logLine).append(System.lineSeparator());
+        }
+        return deviceLog.toString();
     }
 
     private List<String> getScenariosStartWithCaseIds(Collection collection) {

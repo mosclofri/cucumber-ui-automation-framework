@@ -1,4 +1,4 @@
-package com.appium.framework;
+package com.appium.framework.core;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -7,9 +7,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import static com.appium.framework.server.AppiumServer.startAppiumServer;
-import static com.appium.framework.server.AppiumServer.stopAppiumServer;
+import static com.appium.framework.core.AppiumServer.startAppiumServer;
+import static com.appium.framework.core.AppiumServer.stopAppiumServer;
 import static com.support.framework.support.Property.*;
+import static com.support.framework.support.Util.getURLPort;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -17,9 +18,9 @@ import static com.support.framework.support.Property.*;
         features = {"classpath:features"},
         glue = {"com.appium.test.stepdefs", "com.appium.framework.stepdefs"},
         tags = {"~@ignore"})
-public class RunCukesTest {
+public class AppiumCukes {
 
-    private static final Logger LOG = Logger.getLogger(RunCukesTest.class);
+    private static final Logger LOG = Logger.getLogger(AppiumCukes.class);
 
     @BeforeClass
     public static void startAppium() {
@@ -28,14 +29,14 @@ public class RunCukesTest {
             LOG.info("### Trying ADB Connect To QA Farm Device ###");
             try {
                 Runtime rt = Runtime.getRuntime();
-                rt.exec("adb connect " + DEVICE_NAME);
+                rt.exec("adb connect " + DEVICE_NAME.toString());
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
 
         LOG.info("### Starting Appium Server ####");
-        LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG);
+        LOG.info("Appium Host: " + getURLPort("url") + " & Port: " + getURLPort("port") + " & Log Level: " + APPIUM_LOG);
         LOG.info("Platform: " + PLATFORM_NAME + " & Test Device: " + DEVICE_NAME);
         LOG.info("Application In Test: " + APP_FILE);
         LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);

@@ -49,7 +49,7 @@ final class TestCapabilities {
 
     static URL getUrl() {
         try {
-            return new URL("http://" + APPIUM_HOST + ":" + APPIUM_PORT + "/wd/hub");
+            return new URL("http://" + APPIUM_URL.toString() + "/wd/hub");
         } catch (MalformedURLException e) {
             System.err.println("Cannot initiate REST http interface listener URL");
             return null;

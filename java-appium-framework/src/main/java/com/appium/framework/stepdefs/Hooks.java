@@ -13,7 +13,7 @@ public class Hooks {
 
     @After
     public void after() {
-        baseAppium.hookAfter(baseAppium.captureLog(), baseAppium.takeScreenShotAsByte());
+        baseAppium.hookAfter();
     }
 
     @Before

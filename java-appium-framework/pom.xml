@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.github.mosclofri</groupId>
             <artifactId>java-support-framework</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>io.appium</groupId>

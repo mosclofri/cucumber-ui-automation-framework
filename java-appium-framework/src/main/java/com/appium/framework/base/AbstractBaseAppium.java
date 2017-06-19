@@ -6,14 +6,13 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.support.framework.support.Property.*;
+import static com.support.framework.support.Property.DEVICE_NAME;
+import static com.support.framework.support.Property.IMPLICIT_WAIT;
 
 abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
 
@@ -23,21 +22,6 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
     AbstractBaseAppium(AppiumDriver<? extends MobileElement> driver) {
         super(driver);
         this.driver = driver;
-    }
-
-    public String captureLog() {
-        LOG.info("Capturing device logs");
-        String logType;
-        if (PLATFORM_NAME.toString().equalsIgnoreCase("android"))
-            logType = "logcat";
-        else
-            logType = "syslog";
-        StringBuilder deviceLog = new StringBuilder();
-        List<LogEntry> logEntries = driver.manage().logs().get(logType).getAll();
-        for (LogEntry logLine : logEntries) {
-            deviceLog.append(logLine).append(System.lineSeparator());
-        }
-        return deviceLog.toString();
     }
 
     public String getAndroidSDKVersion() {

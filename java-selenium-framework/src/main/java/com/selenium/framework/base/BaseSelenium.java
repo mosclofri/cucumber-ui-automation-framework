@@ -5,11 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-/**
- * Copyright 2017 Monitise Group.
- * Part of selenium-testframework
- * Created by samakays on 09/06/2017.
- */
 @Component
 @Scope("cucumber-glue")
 public class BaseSelenium extends AbstractBaseSelenium {

@@ -3,16 +3,12 @@ package com.appium.framework.base;
 import com.support.framework.base.AbstractBase;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 
+import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import static com.support.framework.support.Property.DEVICE_NAME;
-import static com.support.framework.support.Property.IMPLICIT_WAIT;
 
 abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
 
@@ -24,57 +20,51 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
         this.driver = driver;
     }
 
-    public String getAndroidSDKVersion() {
-        return executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.build.version.sdk");
+    public void androidAllowGranularPermissions() {
+        setDriverWaitTime(1);
+        while (true) {
+            try {
+                MobileElement element = getDriver().findElement(By.xpath("//android.widget.Button[@resource-id='com.android.packageinstaller:id/permission_allow_button']"));
+                element.click();
+            } catch (NoSuchElementException e) {
+                break;
+            }
+        }
+        setDefaultDriverWaitTime();
+    }
+
+    public void androidCheckAll(List<MobileElement> elements) {
+        for (MobileElement anElementList : elements) {
+            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
+                anElementList.click();
+            }
+        }
+    }
+
+    public Boolean androidIsAllChecked(List<MobileElement> elements) {
+        for (MobileElement anElementList : elements) {
+            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean androidIsChecked(MobileElement element) {
+        return Boolean.parseBoolean(element.getAttribute("checked"));
+    }
+
+    public Boolean androidIsChecked(List<MobileElement> element, int index) {
+        return Boolean.parseBoolean(element.get(index).getAttribute("checked"));
     }
 
     public AppiumDriver<? extends MobileElement> getDriver() {
         return driver;
     }
 
-    public void initElementsWithFieldDecorator(Object object) {
-        PageFactory.initElements(
-                new AppiumFieldDecorator(driver, Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS), object);
-    }
-
-    public void initElementsWithFieldDecorator(Object object, int timeout) {
-        PageFactory.initElements(
-                new AppiumFieldDecorator(driver, timeout, TimeUnit.SECONDS), object);
-    }
-
     public void restartApp() {
         driver.closeApp();
         driver.launchApp();
-    }
-
-    public void swipeDown() {
-        Dimension dimensions = getDriver().manage().window().getSize();
-        int scrollStart = (int) (dimensions.getHeight() * 0.80);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.20);
-        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
-    }
-
-    public void swipeLeft() {
-        Dimension size = getDriver().manage().window().getSize();
-        int startx = (int) (size.width * 0.80);
-        int endx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
-    }
-
-    public void swipeRight() {
-        Dimension size = getDriver().manage().window().getSize();
-        int endx = (int) (size.width * 0.80);
-        int startx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
-    }
-
-    public void swipeUp() {
-        Dimension dimensions = getDriver().manage().window().getSize();
-        int scrollStart = (int) (dimensions.getHeight() * 0.20);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.80);
-        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
     }
 
     public void switchContextToFirstWEBVIEW() {

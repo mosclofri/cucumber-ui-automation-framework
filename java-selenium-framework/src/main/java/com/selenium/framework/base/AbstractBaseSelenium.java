@@ -9,7 +9,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -40,10 +39,6 @@ abstract class AbstractBaseSelenium extends AbstractBase<WebElement> {
 
     public void getURL(String subURL) {
         driver.get(Property.BASE_URL + subURL);
-    }
-
-    public void initPageFactoryElements(Object object) {
-        PageFactory.initElements(driver, object);
     }
 
     public Alert waitAlert(int duration) {

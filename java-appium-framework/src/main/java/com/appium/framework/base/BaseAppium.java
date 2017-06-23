@@ -1,18 +1,22 @@
 package com.appium.framework.base;
 
+import com.support.framework.base.DriverInterface;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.support.PageFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.support.framework.support.Property.IMPLICIT_WAIT;
 
 @Component
 @Scope("cucumber-glue")
-public class BaseAppium extends AbstractBaseAppium {
+public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
 
     private static final Logger LOG = Logger.getLogger(BaseAppium.class);
 
@@ -20,42 +24,44 @@ public class BaseAppium extends AbstractBaseAppium {
         super(driver);
     }
 
-    public void androidAllowGranularPermissions() {
-        setDriverWaitTime(1);
-        while (true) {
-            try {
-                MobileElement element = getDriver().findElement(By.xpath("//android.widget.Button[@resource-id='com.android.packageinstaller:id/permission_allow_button']"));
-                element.click();
-            } catch (NoSuchElementException e) {
-                break;
-            }
-        }
-        setDefaultDriverWaitTime();
+    @Override
+    public void initPageFactoryElements(Object object) {
+        PageFactory.initElements(
+                new AppiumFieldDecorator(getDriver(), Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS), object);
     }
 
-    public void androidCheckAll(List<MobileElement> elements) {
-        for (MobileElement anElementList : elements) {
-            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
-                anElementList.click();
-            }
-        }
+    @Override
+    public void swipeDown() {
+        Dimension dimensions = getDriver().manage().window().getSize();
+        int scrollStart = (int) (dimensions.getHeight() * 0.80);
+        int scrollEnd = (int) (dimensions.getHeight() * 0.20);
+        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
     }
 
-    public Boolean androidIsAllChecked(List<MobileElement> elements) {
-        for (MobileElement anElementList : elements) {
-            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public void swipeLeft() {
+        Dimension size = getDriver().manage().window().getSize();
+        int startx = (int) (size.width * 0.80);
+        int endx = (int) (size.width * 0.20);
+        int starty = size.height / 2;
+        getDriver().swipe(startx, starty, endx, starty, 1000);
     }
 
-    public Boolean androidIsChecked(MobileElement element) {
-        return Boolean.parseBoolean(element.getAttribute("checked"));
+    @Override
+    public void swipeRight() {
+        Dimension size = getDriver().manage().window().getSize();
+        int endx = (int) (size.width * 0.80);
+        int startx = (int) (size.width * 0.20);
+        int starty = size.height / 2;
+        getDriver().swipe(startx, starty, endx, starty, 1000);
     }
 
-    public Boolean androidIsChecked(List<MobileElement> element, int index) {
-        return Boolean.parseBoolean(element.get(index).getAttribute("checked"));
+    @Override
+    public void swipeUp() {
+        Dimension dimensions = getDriver().manage().window().getSize();
+        int scrollStart = (int) (dimensions.getHeight() * 0.20);
+        int scrollEnd = (int) (dimensions.getHeight() * 0.80);
+        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
     }
 
 }

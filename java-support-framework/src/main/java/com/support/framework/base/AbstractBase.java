@@ -150,6 +150,10 @@ public abstract class AbstractBase<T extends WebElement> {
         return null;
     }
 
+    public String getAndroidSDKVersion() {
+        return executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.build.version.sdk");
+    }
+
     public Scenario getScenario() {
         return scenario;
     }
@@ -186,20 +190,10 @@ public abstract class AbstractBase<T extends WebElement> {
         return element.getText().contains(text);
     }
 
-    public boolean isElementNotPresent(T element, int seconds) {
+    public boolean isElementNotPresent(T element, int duration) {
         try {
-            new WebDriverWait(driver, seconds)
+            new WebDriverWait(driver, duration)
                     .until(ExpectedConditions.visibilityOf(element));
-            return false;
-        } catch (NoSuchElementException e) {
-            return true;
-        }
-    }
-
-    public boolean isElementNotPresent(List<T> element, int index, int seconds) {
-        try {
-            new WebDriverWait(driver, seconds)
-                    .until(ExpectedConditions.visibilityOf(element.get(index)));
             return false;
         } catch (NoSuchElementException e) {
             return true;
@@ -215,31 +209,12 @@ public abstract class AbstractBase<T extends WebElement> {
         }
     }
 
-    public boolean isElementNotPresent(List<T> element, int index) {
+    public boolean isElementPresent(T element, int duration) {
         try {
-            element.get(index).isDisplayed();
-            return false;
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
-            return true;
-        }
-    }
-
-    public boolean isElementPresent(T element, int seconds) {
-        try {
-            new WebDriverWait(driver, seconds)
+            new WebDriverWait(driver, duration)
                     .until(ExpectedConditions.visibilityOf(element));
             return true;
         } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    public boolean isElementPresent(List<T> element, int index, int seconds) {
-        try {
-            new WebDriverWait(driver, seconds)
-                    .until(ExpectedConditions.visibilityOf(element.get(index)));
-            return true;
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -249,15 +224,6 @@ public abstract class AbstractBase<T extends WebElement> {
             element.isDisplayed();
             return true;
         } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    public boolean isElementPresent(List<T> element, int index) {
-        try {
-            element.get(index).isDisplayed();
-            return true;
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -295,37 +261,24 @@ public abstract class AbstractBase<T extends WebElement> {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
-    public void shouldDisplay(T element, int seconds) {
-        assertTrue(isElementPresent(element, seconds));
-    }
-
-    public void shouldDisplay(List<T> element, int index, int seconds) {
-        assertTrue(isElementPresent(element, index, seconds));
+    public void shouldDisplay(T element, int duration) {
+        assertTrue(isElementPresent(element, duration));
     }
 
     public void shouldDisplay(T element) {
         assertTrue(isElementPresent(element));
     }
 
-    public void shouldDisplay(List<T> element, int index) {
-        assertTrue(isElementPresent(element, index));
+
+    public void shouldNotDisplay(T element, int duration) {
+        assertTrue(isElementNotPresent(element, duration));
     }
 
-    public void shouldNotDisplay(T element, int seconds) {
-        assertTrue(isElementNotPresent(element, seconds));
-    }
-
-    public void shouldNotDisplay(List<T> element, int index, int seconds) {
-        assertTrue(isElementNotPresent(element, index, seconds));
-    }
 
     public void shouldNotDisplay(T element) {
         assertTrue(isElementNotPresent(element));
     }
 
-    public void shouldNotDisplay(List<T> element, int index) {
-        assertTrue(isElementNotPresent(element, index));
-    }
 
     public void skipScenario(String reasonToSkip) {
         LOG.info("Will skip current scenario. Reason to skip: " + reasonToSkip);
@@ -338,12 +291,12 @@ public abstract class AbstractBase<T extends WebElement> {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 
-    public void threadWait(double seconds) {
+    public void threadWait(double duration) {
         try {
-            if (seconds > 3) {
-                LOG.info("Waiting '" + seconds + "' seconds");
+            if (duration > 3) {
+                LOG.info("Waiting '" + duration + "' duration");
             }
-            Thread.sleep((long) (seconds * 1000));
+            Thread.sleep((long) (duration * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package com.appium.framework.driver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -25,7 +26,7 @@ final class TestCapabilities {
                     new File(URLDecoder.decode(ClassLoader.getSystemResource((APP_FILE.toString())).getFile(),
                             StandardCharsets.UTF_8.toString())).getAbsolutePath());
         } catch (NullPointerException e) {
-            LOG.error("Cannot find given application file" + e);
+            Assert.fail("Cannot find given application file" + e);
         } catch (UnsupportedEncodingException e) {
             LOG.warn(e);
         }
@@ -42,7 +43,7 @@ final class TestCapabilities {
                 capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true);
                 break;
             default:
-                LOG.error("Current test platform is not supported: " + PLATFORM_NAME);
+                Assert.fail("Current test platform is not supported: " + PLATFORM_NAME);
         }
         return capabilities;
     }
@@ -51,7 +52,7 @@ final class TestCapabilities {
         try {
             return new URL("http://" + APPIUM_URL.toString() + "/wd/hub");
         } catch (MalformedURLException e) {
-            System.err.println("Cannot initiate REST http interface listener URL");
+            Assert.fail("Cannot initiate REST http interface listener URL");
             return null;
         }
     }

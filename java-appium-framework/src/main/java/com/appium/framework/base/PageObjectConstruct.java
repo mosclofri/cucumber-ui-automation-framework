@@ -20,7 +20,7 @@ public class PageObjectConstruct {
 
     @PostConstruct
     private void init() {
-        appiumBase.initElementsWithFieldDecorator(this);
+        appiumBase.initPageFactoryElements(this);
     }
 
 }

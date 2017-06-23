@@ -28,7 +28,7 @@ class SeleniumDriverUtils {
     private static final Logger LOG = Logger.getLogger(SeleniumDriverUtils.class);
 
     @Bean(destroyMethod = "quit")
-    @Scope("cucumber-glue-selenium")
+    @Scope("cucumber-glue")
     @Profile("Selenium")
     private WebDriver getWebDriver() {
         WebDriver driver;

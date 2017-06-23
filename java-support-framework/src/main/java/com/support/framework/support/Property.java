@@ -8,7 +8,7 @@ public enum Property {
 
     PLATFORM_NAME(System.getProperty("platform.name")),
     PLATFORM_VERSION(System.getProperty("platform.version")),
-    IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("3")),
+    IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("1")),
     COMPARE_IMAGE(Optional.ofNullable(System.getProperty("compare.image")).orElse("false")),
 
     //Appium Specific

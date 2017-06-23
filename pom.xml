@@ -23,6 +23,7 @@
         <drivermanager-version>1.6.2</drivermanager-version>
         <github-maven-version>0.12</github-maven-version>
         <github.global.server>github</github.global.server>
+        <jfairy-version>0.5.7</jfairy-version>
         <log4j-version>1.2.17</log4j-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <reporting-version>3.8.0</reporting-version>

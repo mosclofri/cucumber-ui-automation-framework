@@ -10,10 +10,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.support.framework.support.Property.IMPLICIT_WAIT;
-
 @Component
 @Scope("cucumber-glue")
 public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
@@ -27,7 +23,7 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
     @Override
     public void initPageFactoryElements(Object object) {
         PageFactory.initElements(
-                new AppiumFieldDecorator(getDriver(), Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS), object);
+                new AppiumFieldDecorator(getDriver()), object);
     }
 
     @Override

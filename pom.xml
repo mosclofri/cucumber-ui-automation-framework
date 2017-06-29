@@ -87,7 +87,7 @@
                             <goals>
                                 <goal>generate</goal>
                             </goals>
-                            <phase>test</phase>
+                            <phase>verify</phase>
                             <configuration>
                                 <projectName>${project.artifactId}</projectName>
                                 <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>

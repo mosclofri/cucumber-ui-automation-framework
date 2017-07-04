@@ -7,12 +7,9 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.logging.Level;
 
 import static com.support.framework.support.Property.BROWSER_NAME;
-import static com.support.framework.support.Property.GRID_URL;
 import static com.support.framework.support.Property.PLATFORM_NAME;
 import static com.support.framework.support.Property.SELENIUM_LOG;
 
@@ -56,14 +53,4 @@ class TestCapabilities {
         return desiredCapabilities;
     }
 
-    URL getRemoteUrl() {
-        try {
-            String url = "http://" + GRID_URL + "/wd/hub";
-            LOG.info("Grid URL : " + url);
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            System.err.println("Cannot initiate REST http interface listener URL");
-            return null;
-        }
-    }
 }

@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.appium.framework.driver.TestCapabilities.getDesiredCapabilities;
 import static com.appium.framework.driver.TestCapabilities.getUrl;
+import static com.support.framework.support.Property.GRID_USE;
 import static com.support.framework.support.Property.IMPLICIT_WAIT;
+import static com.support.framework.support.Util.getRemoteUrl;
 
 @Component
 public class AppiumDriverUtils {
@@ -21,7 +23,12 @@ public class AppiumDriverUtils {
     @Scope("cucumber-glue")
     @Profile("Android")
     private AndroidDriver<? extends MobileElement> getAndroidDriver() {
-        AndroidDriver<? extends MobileElement> driver = new AndroidDriver<>(getUrl(), getDesiredCapabilities());
+        AndroidDriver<? extends MobileElement> driver;
+        if (GRID_USE.toString().equalsIgnoreCase("true")) {
+            driver = new AndroidDriver<>(getRemoteUrl(), getDesiredCapabilities());
+        } else {
+            driver = new AndroidDriver<>(getUrl(), getDesiredCapabilities());
+        }
         driver.manage().timeouts().implicitlyWait(Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS);
         return driver;
     }
@@ -30,7 +37,12 @@ public class AppiumDriverUtils {
     @Scope("cucumber-glue")
     @Profile("IOS")
     private IOSDriver<? extends MobileElement> getIOSDriver() {
-        IOSDriver<? extends MobileElement> driver = new IOSDriver<>(getUrl(), getDesiredCapabilities());
+        IOSDriver<? extends MobileElement> driver;
+        if (GRID_USE.toString().equalsIgnoreCase("true")) {
+            driver = new IOSDriver<MobileElement>(getRemoteUrl(), getDesiredCapabilities());
+        } else {
+            driver = new IOSDriver<MobileElement>(getUrl(), getDesiredCapabilities());
+        }
         driver.manage().timeouts().implicitlyWait(Integer.parseInt(IMPLICIT_WAIT.toString()), TimeUnit.SECONDS);
         return driver;
     }

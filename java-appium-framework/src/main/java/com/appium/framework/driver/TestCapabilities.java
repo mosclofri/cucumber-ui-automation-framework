@@ -33,7 +33,9 @@ final class TestCapabilities {
         }
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
-        capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
+        if (!GRID_USE.toString().equalsIgnoreCase("true")) {
+            capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
+        }
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
         switch (PLATFORM_NAME.toString().toUpperCase()) {
             case "IOS":

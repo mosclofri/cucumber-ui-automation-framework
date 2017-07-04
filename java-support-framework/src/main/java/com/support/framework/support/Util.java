@@ -8,7 +8,11 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
+import java.net.URL;
+
+import static com.support.framework.support.Property.GRID_URL;
 
 public class Util {
 
@@ -26,6 +30,17 @@ public class Util {
             }
         }
         return currentPort;
+    }
+
+    public static URL getRemoteUrl() {
+        try {
+            String url = "http://" + GRID_URL + "/wd/hub";
+            LOG.info("Grid URL : " + url);
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            System.err.println("Cannot initiate REST http interface listener URL");
+            return null;
+        }
     }
 
     public static void logCucumberStep() {

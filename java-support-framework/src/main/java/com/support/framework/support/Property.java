@@ -12,6 +12,8 @@ public enum Property {
     PLATFORM_VERSION(System.getProperty("platform.version")),
     IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("1")),
     COMPARE_IMAGE(Optional.ofNullable(System.getProperty("compare.image")).orElse("false")),
+    GRID_USE(Optional.ofNullable(System.getProperty("grid.use")).orElse("false")),
+    GRID_URL(System.getProperty("grid.url")),
 
     //Appium Specific
     APP_FILE(System.getProperty("app.file")),
@@ -24,8 +26,6 @@ public enum Property {
     //Selenium Specific
     BROWSER_NAME(Optional.ofNullable(System.getProperty("browser.name")).orElse("Chrome")),
     BASE_URL(System.getProperty("base.url")),
-    GRID_URL(System.getProperty("grid.url")),
-    GRID_USE(System.getProperty("grid.use")),
     SELENIUM_LOG(Optional.ofNullable(System.getProperty("selenium.log")).orElse("WARNING")),
 
     TESTRAIL_URL(System.getProperty("testrail.url"));

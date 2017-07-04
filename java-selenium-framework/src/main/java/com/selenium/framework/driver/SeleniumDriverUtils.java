@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import static com.support.framework.support.Property.BROWSER_NAME;
 import static com.support.framework.support.Property.GRID_USE;
+import static com.support.framework.support.Util.getRemoteUrl;
 
 @Component
 class SeleniumDriverUtils {
@@ -35,7 +36,7 @@ class SeleniumDriverUtils {
         TestCapabilities testCapabilities = new TestCapabilities();
         LOG.info("Initializing WebDriver");
         if (GRID_USE.toString().equalsIgnoreCase("true")) {
-            driver = new RemoteWebDriver(testCapabilities.getRemoteUrl(), testCapabilities.getDesiredCapabilities());
+            driver = new RemoteWebDriver(getRemoteUrl(), testCapabilities.getDesiredCapabilities());
         } else {
             switch (BROWSER_NAME.toString().toLowerCase()) {
                 case "chrome":

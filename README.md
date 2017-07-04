@@ -9,7 +9,7 @@
 
   **This repository itself does not contains any test. This is just a framework.**
   
-  **See repository [cucumber-ui-automation-test](https://github.com/mosclofri/cucumber-ui-automation-test) for the framework usage and execution**
+  **See repository [cucumber-appium-java-test](https://github.com/mosclofri/cucumber-appium-java-test) for the framework usage and execution**
 
 ### Prerequisites
 
@@ -27,7 +27,6 @@
 run `appium-doctor` to ensure your system is set up properly
 
 ### Technology:
- * Selenium
  * Appium
  * Cucumber
  * Maven
@@ -44,7 +43,7 @@ run `appium-doctor` to ensure your system is set up properly
  
 ### Future Work:
  * Network mocking module
- * Improved logging to replace built-in log output
+ * Improved logging to replace appium built-in log output
  * Parallel and feature parallel test execution
  * Provide maven archetype for test project creation
 

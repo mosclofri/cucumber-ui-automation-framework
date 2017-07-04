@@ -1,50 +1,62 @@
 package com.support.framework.support;
 
-import io.codearte.jfairy.Fairy;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.junit.AssumptionViolatedException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 
-import static com.support.framework.support.Property.APPIUM_URL;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 public class Util {
 
-    public static String getURLPort(String uop) {
-        String s = APPIUM_URL.toString();
-        switch (uop) {
-            case "url":
-                return s.split("\\:")[0];
-            case "port":
-                return s.split("\\:")[1];
-            default:
-                return APPIUM_URL.toString();
+    private static final Logger LOG = Logger.getLogger(Util.class);
+
+    public static int getPort(int currentPort) {
+        if (currentPort == 0) {
+            try {
+                ServerSocket socket = new ServerSocket(0);
+                socket.setReuseAddress(true);
+                socket.close();
+                return socket.getLocalPort();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        return currentPort;
     }
 
-    public static boolean stringIsEmpty(String str) {
-        return str == null || str.length() == 0;
+    public static void logCucumberStep() {
+        StackTraceElement stackTraceElements = Thread.currentThread().getStackTrace()[2];
+        String methodName = StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(stackTraceElements.getMethodName()), ' ');
+        LOG.info(methodName);
     }
 
-    public static class DataGenerator {
-        public static String getRandomEmail() {
-            return Fairy.create().person().getEmail();
-        }
+    public static void skipScenario(String reasonToSkip) {
+        LOG.info("Will skip current scenario. Reason to skip: " + reasonToSkip);
+        throw new AssumptionViolatedException(reasonToSkip);
+    }
 
-        public static String getRandomFullName() {
-            return Fairy.create().person().getFullName();
-        }
+    public static boolean stringIsEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
 
-        public static String getRandomLastName() {
-            return Fairy.create().person().getLastName();
-        }
+    public static byte[] takeScreenShotAsByte(WebDriver driver) {
+        LOG.info("Capturing a screenshot");
+        threadWait(0.25);
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
 
-        public static String getRandomName() {
-            return Fairy.create().person().getFirstName();
-        }
-
-        public static String getRandomParagraph(int sentenceCount) {
-            return Fairy.create().textProducer().paragraph(sentenceCount);
-        }
-
-        public static String getRandomSentence(int worldCount) {
-            return Fairy.create().textProducer().sentence(worldCount);
+    public static void threadWait(double duration) {
+        try {
+            if (duration > 3) {
+                LOG.info("Waiting '" + duration + "' duration");
+            }
+            Thread.sleep((long) (duration * 1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

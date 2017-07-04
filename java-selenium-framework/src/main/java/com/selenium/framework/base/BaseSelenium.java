@@ -24,22 +24,22 @@ public class BaseSelenium extends AbstractBaseSelenium implements DriverInterfac
 
     @Override
     public void swipeDown() {
-        //TODO
+        //ToDo
     }
 
     @Override
     public void swipeLeft() {
-        //TODO
+        //ToDo
     }
 
     @Override
     public void swipeRight() {
-        //TODO
+        //ToDo
     }
 
     @Override
     public void swipeUp() {
-        //TODO
+        //ToDo
     }
 
 

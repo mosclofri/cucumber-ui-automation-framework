@@ -1,5 +1,6 @@
 package com.appium.framework.core;
 
+import com.support.framework.support.Property;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 import org.apache.log4j.Logger;
@@ -10,7 +11,7 @@ import org.junit.runner.RunWith;
 import static com.appium.framework.core.AppiumServer.startAppiumServer;
 import static com.appium.framework.core.AppiumServer.stopAppiumServer;
 import static com.support.framework.support.Property.*;
-import static com.support.framework.support.Util.getURLPort;
+import static com.support.framework.support.Util.getPort;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -21,6 +22,7 @@ import static com.support.framework.support.Util.getURLPort;
 public class AppiumCukes {
 
     private static final Logger LOG = Logger.getLogger(AppiumCukes.class);
+    public static int APPIUM_PORT;
 
     @BeforeClass
     public static void startAppium() {
@@ -36,7 +38,8 @@ public class AppiumCukes {
         }
 
         LOG.info("### Starting Appium Server ####");
-        LOG.info("Appium Host: " + getURLPort("url") + " & Port: " + getURLPort("port") + " & Log Level: " + APPIUM_LOG);
+        APPIUM_PORT = getPort(Property.APPIUM_PORT.toInt());
+        LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG);
         LOG.info("Platform: " + PLATFORM_NAME + " & Test Device: " + DEVICE_NAME);
         LOG.info("Application In Test: " + APP_FILE);
         LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);

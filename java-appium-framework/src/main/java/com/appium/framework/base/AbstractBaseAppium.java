@@ -26,40 +26,36 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
             try {
                 MobileElement element = getDriver().findElement(By.xpath("//android.widget.Button[@resource-id='com.android.packageinstaller:id/permission_allow_button']"));
                 element.click();
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchElementException ignore) {
                 break;
             }
         }
         setDefaultDriverWaitTime();
     }
 
+    public AppiumDriver<? extends MobileElement> getDriver() {
+        return driver;
+    }
+
     public void androidCheckAll(List<MobileElement> elements) {
         for (MobileElement anElementList : elements) {
-            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
+            if (!androidIsChecked(anElementList)) {
                 anElementList.click();
             }
         }
-    }
-
-    public Boolean androidIsAllChecked(List<MobileElement> elements) {
-        for (MobileElement anElementList : elements) {
-            if (!Boolean.parseBoolean(anElementList.getAttribute("checked"))) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public Boolean androidIsChecked(MobileElement element) {
         return Boolean.parseBoolean(element.getAttribute("checked"));
     }
 
-    public Boolean androidIsChecked(List<MobileElement> element, int index) {
-        return Boolean.parseBoolean(element.get(index).getAttribute("checked"));
-    }
-
-    public AppiumDriver<? extends MobileElement> getDriver() {
-        return driver;
+    public Boolean androidIsAllChecked(List<MobileElement> elements) {
+        for (MobileElement anElementList : elements) {
+            if (!androidIsChecked(anElementList)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void restartApp() {

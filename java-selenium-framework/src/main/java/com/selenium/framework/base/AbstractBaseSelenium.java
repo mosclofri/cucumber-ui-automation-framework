@@ -33,10 +33,6 @@ abstract class AbstractBaseSelenium extends AbstractBase<WebElement> {
         return driver.getPageSource().contains(text);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     public void getURL(String subURL) {
         driver.get(Property.BASE_URL + subURL);
     }
@@ -49,6 +45,10 @@ abstract class AbstractBaseSelenium extends AbstractBase<WebElement> {
         } catch (Throwable error) {
             return null;
         }
+    }
+
+    public WebDriver getDriver() {
+        return driver;
     }
 
     public void waitForPageLoaded(int waitDuration) {

@@ -16,12 +16,12 @@ public class Hooks {
 
     @After
     public void after() {
-        baseSelenium.hookAfter();
+        com.support.framework.hook.Hooks.hookAfter(baseSelenium.getDriver());
     }
 
     @Before
     public void before(Scenario scenario) {
-        baseSelenium.hookBefore(scenario);
+        com.support.framework.hook.Hooks.hookBefore(scenario);
     }
 
 }

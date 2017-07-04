@@ -34,25 +34,6 @@ class TestCapabilities {
         }
     }
 
-    URL getRemoteUrl() {
-        try {
-            String url = "http://" + GRID_URL + "/wd/hub";
-            LOG.info("Grid URL : " + url);
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            System.err.println("Cannot initiate REST http interface listener URL");
-            return null;
-        }
-    }
-
-    private DesiredCapabilities getDesktopDesiredCapabilities() {
-        LOG.info("Getting Desktop Capabilities");
-        desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setBrowserName(BROWSER_NAME.toString());
-        desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
-        return desiredCapabilities;
-    }
-
     private DesiredCapabilities getMobileDesiredCapabilities() {
         LOG.info("Getting Mobile Capabilities");
         desiredCapabilities = new DesiredCapabilities();
@@ -65,5 +46,24 @@ class TestCapabilities {
             desiredCapabilities.setCapability("bundleId", "com.android.chrome");
         }
         return desiredCapabilities;
+    }
+
+    private DesiredCapabilities getDesktopDesiredCapabilities() {
+        LOG.info("Getting Desktop Capabilities");
+        desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setBrowserName(BROWSER_NAME.toString());
+        desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+        return desiredCapabilities;
+    }
+
+    URL getRemoteUrl() {
+        try {
+            String url = "http://" + GRID_URL + "/wd/hub";
+            LOG.info("Grid URL : " + url);
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            System.err.println("Cannot initiate REST http interface listener URL");
+            return null;
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+import static com.appium.framework.core.AppiumCukes.APPIUM_PORT;
 import static com.support.framework.support.Property.*;
 
 final class TestCapabilities {
@@ -50,7 +51,7 @@ final class TestCapabilities {
 
     static URL getUrl() {
         try {
-            return new URL("http://" + APPIUM_URL.toString() + "/wd/hub");
+            return new URL("http://" + APPIUM_HOST.toString() + ":" + APPIUM_PORT + "/wd/hub");
         } catch (MalformedURLException e) {
             Assert.fail("Cannot initiate REST http interface listener URL");
             return null;

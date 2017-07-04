@@ -13,12 +13,12 @@ public class Hooks {
 
     @After
     public void after() {
-        baseAppium.hookAfter();
+        com.support.framework.hook.Hooks.hookAfter(baseAppium.getDriver());
     }
 
     @Before
     public void before(Scenario scenario) {
-        baseAppium.hookBefore(scenario);
+        com.support.framework.hook.Hooks.hookBefore(scenario);
     }
 
 }

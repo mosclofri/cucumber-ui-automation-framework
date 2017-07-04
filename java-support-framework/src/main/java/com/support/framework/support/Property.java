@@ -4,6 +4,8 @@ import org.junit.Assert;
 
 import java.util.Optional;
 
+import static com.support.framework.support.Util.stringIsEmpty;
+
 public enum Property {
 
     PLATFORM_NAME(System.getProperty("platform.name")),
@@ -14,7 +16,8 @@ public enum Property {
     //Appium Specific
     APP_FILE(System.getProperty("app.file")),
     DEVICE_NAME(System.getProperty("device.name")),
-    APPIUM_URL(Optional.ofNullable(System.getProperty("appium.url")).orElse("127.0.0.1:4799")),
+    APPIUM_HOST(Optional.ofNullable(System.getProperty("appium.host")).orElse("127.0.0.1")),
+    APPIUM_PORT(Optional.ofNullable(System.getProperty("appium.port")).orElse("0")),
     NO_RESET(Optional.ofNullable(System.getProperty("no.reset")).orElse("true")),
     APPIUM_LOG(Optional.ofNullable(System.getProperty("appium.log")).orElse("warn")),
 
@@ -33,9 +36,16 @@ public enum Property {
         this.value = value;
     }
 
+    public int toInt() {
+        if (stringIsEmpty(value)) {
+            Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
+        }
+        return Integer.valueOf(value);
+    }
+
     @Override
     public String toString() {
-        if (value == null || value.length() == 0) {
+        if (stringIsEmpty(value)) {
             Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
         }
         return value;

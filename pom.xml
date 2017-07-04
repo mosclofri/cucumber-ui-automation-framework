@@ -25,7 +25,7 @@
         <github.global.server>github</github.global.server>
         <jfairy-version>0.5.7</jfairy-version>
         <log4j-version>1.2.17</log4j-version>
-        <release-plugin-version>2.5.3</release-plugin-version>
+        <maven-version-plugin>2.1</maven-version-plugin>
         <reporting-version>3.8.0</reporting-version>
         <selenium-java-version>3.3.1</selenium-java-version>
         <selenium-support-version>2.53.1</selenium-support-version>
@@ -70,11 +70,11 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>${release-plugin-version}</version>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>${maven-version-plugin}</version>
                     <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <generateBackupPoms>false</generateBackupPoms>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -87,7 +87,7 @@
                             <goals>
                                 <goal>generate</goal>
                             </goals>
-                            <phase>verify</phase>
+                            <phase>test</phase>
                             <configuration>
                                 <projectName>${project.artifactId}</projectName>
                                 <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
@@ -139,7 +139,8 @@
                 <inherited>true</inherited>
             </plugin>
             <plugin>
-                <artifactId>maven-release-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
                 <inherited>false</inherited>
             </plugin>
             <plugin>

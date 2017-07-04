@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
 
     private static final Logger LOG = Logger.getLogger(BaseAppium.class);
+    private final double FIRST_MULTIPLIER = 0.80;
+    private final double SECOND_MULTIPLIER = 0.20;
+    private final int SWIPE_DURATION = 1000;
 
     public BaseAppium(AppiumDriver<? extends MobileElement> driver) {
         super(driver);
@@ -28,36 +31,37 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
 
     @Override
     public void swipeDown() {
-        Dimension dimensions = getDriver().manage().window().getSize();
-        int scrollStart = (int) (dimensions.getHeight() * 0.80);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.20);
-        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
+        swipeUpOrDown(FIRST_MULTIPLIER, SECOND_MULTIPLIER);
     }
 
     @Override
     public void swipeLeft() {
-        Dimension size = getDriver().manage().window().getSize();
-        int startx = (int) (size.width * 0.80);
-        int endx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
+        swipeLeftOrRight(FIRST_MULTIPLIER, SECOND_MULTIPLIER);
     }
 
     @Override
     public void swipeRight() {
-        Dimension size = getDriver().manage().window().getSize();
-        int endx = (int) (size.width * 0.80);
-        int startx = (int) (size.width * 0.20);
-        int starty = size.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, 1000);
+        swipeLeftOrRight(SECOND_MULTIPLIER, FIRST_MULTIPLIER);
     }
 
     @Override
     public void swipeUp() {
+        swipeUpOrDown(SECOND_MULTIPLIER, FIRST_MULTIPLIER);
+    }
+
+    private void swipeLeftOrRight(double first, double second) {
         Dimension dimensions = getDriver().manage().window().getSize();
-        int scrollStart = (int) (dimensions.getHeight() * 0.20);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.80);
-        getDriver().swipe(0, scrollStart, 0, scrollEnd, 1000);
+        int startx = (int) (dimensions.width * first);
+        int endx = (int) (dimensions.width * second);
+        int starty = dimensions.height / 2;
+        getDriver().swipe(startx, starty, endx, starty, SWIPE_DURATION);
+    }
+
+    private void swipeUpOrDown(double first, double second) {
+        Dimension dimensions = getDriver().manage().window().getSize();
+        int scrollStart = (int) (dimensions.getHeight() * first);
+        int scrollEnd = (int) (dimensions.getHeight() * second);
+        getDriver().swipe(0, scrollStart, 0, scrollEnd, SWIPE_DURATION);
     }
 
 }

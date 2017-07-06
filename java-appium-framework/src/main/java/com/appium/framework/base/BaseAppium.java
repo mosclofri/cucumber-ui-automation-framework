@@ -3,6 +3,7 @@ package com.appium.framework.base;
 import com.support.framework.base.DriverInterface;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Dimension;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("cucumber-glue")
-public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
+public class BaseAppium extends AbstractBaseAppium implements DriverInterface<MobileElement> {
 
     private static final Logger LOG = Logger.getLogger(BaseAppium.class);
     private final double FIRST_MULTIPLIER = 0.80;
@@ -27,6 +28,12 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface {
     public void initPageFactoryElements(Object object) {
         PageFactory.initElements(
                 new AppiumFieldDecorator(getDriver()), object);
+    }
+
+    @Override
+    public void longPress(MobileElement element, int duration) {
+        TouchAction touchAction = new TouchAction(getDriver());
+        touchAction.longPress(element, duration).perform().perform();
     }
 
     @Override

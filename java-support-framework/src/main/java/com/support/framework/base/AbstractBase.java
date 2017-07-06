@@ -12,6 +12,8 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import static com.support.framework.support.Property.IMPLICIT_WAIT;
+import static com.support.framework.support.Util.threadWait;
+import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractBase<T extends WebElement> {
@@ -74,6 +76,20 @@ public abstract class AbstractBase<T extends WebElement> {
         }
     }
 
+    public void shouldDisplay(List<T> element, int index, int duration) {
+        assertTrue(isElementPresent(element, index, duration));
+    }
+
+    public boolean isElementPresent(List<T> element, int index, int duration) {
+        try {
+            new WebDriverWait(driver, duration)
+                    .until(ExpectedConditions.visibilityOf(element.get(index)));
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
     public void shouldDisplay(T element) {
         assertTrue(isElementPresent(element));
     }
@@ -93,12 +109,17 @@ public abstract class AbstractBase<T extends WebElement> {
 
     public boolean isElementNotPresent(T element, int duration) {
         try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOf(element));
-            return false;
+            Long a = currentTimeMillis();
+            while ((currentTimeMillis() - a) / 1000 > duration) {
+                if (!element.isDisplayed()) {
+                    return true;
+                }
+                threadWait(.25);
+            }
         } catch (NoSuchElementException e) {
             return true;
         }
+        return false;
     }
 
     public void shouldNotDisplay(T element) {
@@ -114,5 +135,22 @@ public abstract class AbstractBase<T extends WebElement> {
         }
     }
 
-}
+    public void shouldNotDisplay(List<T> element, int index, int duration) {
+        assertTrue(isElementNotPresent(element, index, duration));
+    }
 
+    public boolean isElementNotPresent(List<T> element, int index, int duration) {
+        try {
+            Long a = currentTimeMillis();
+            while ((currentTimeMillis() - a) / 1000 > duration) {
+                if (!element.get(index).isDisplayed())
+                    return true;
+                threadWait(.25);
+            }
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            return true;
+        }
+        return false;
+    }
+
+}

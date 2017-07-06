@@ -21,7 +21,7 @@ public class SeleniumCukes {
 
     @BeforeClass
     public static void startSelenium() {
-        LOG.info("### Starting Selenium " + BROWSER_NAME.toString().toUpperCase() + " Selenium ###");
+        LOG.info("### Starting Selenium " + BROWSER_NAME.toString().toUpperCase() + " ###");
     }
 
     @AfterClass

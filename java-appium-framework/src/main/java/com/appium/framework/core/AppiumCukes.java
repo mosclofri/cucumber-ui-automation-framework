@@ -37,20 +37,18 @@ public class AppiumCukes {
             }
         }
 
-        LOG.info("### Starting Appium Server ####");
+        LOG.info("### Starting Appium ####");
         APPIUM_PORT = getPort(Property.APPIUM_PORT.toInt());
         LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG);
         LOG.info("Platform: " + PLATFORM_NAME + " & Test Device: " + DEVICE_NAME);
         LOG.info("Application In Test: " + APP_FILE);
         LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);
         startAppiumServer();
-        LOG.info("### Appium Server Started ###");
     }
 
     @AfterClass
     public static void stopAppium() {
-        LOG.info("### Closing Appium Server ###");
-        LOG.info("### Closing Done ###");
+        LOG.info("### Stopping Appium ###");
         stopAppiumServer();
     }
 

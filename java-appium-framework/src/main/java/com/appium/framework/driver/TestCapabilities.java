@@ -1,6 +1,7 @@
 package com.appium.framework.driver;
 
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
+import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -39,9 +40,10 @@ final class TestCapabilities {
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
         switch (PLATFORM_NAME.toString().toUpperCase()) {
             case "IOS":
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.IOS_XCUI_TEST);
                 break;
             case "ANDROID":
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.APPIUM);
                 capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);
                 capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true);
                 break;

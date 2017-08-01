@@ -10,10 +10,6 @@ import static com.support.framework.support.Property.DEVICE_NAME;
 
 public class CmdLine {
 
-    public static String getAndroidSDKVersion() {
-        return executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.build.version.sdk");
-    }
-
     public static String executeShellReturnStringResult(String command) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         org.apache.commons.exec.CommandLine commandline = org.apache.commons.exec.CommandLine.parse(command);
@@ -27,6 +23,10 @@ public class CmdLine {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getAndroidSDKVersion() {
+        return executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.build.version.sdk");
     }
 
 }

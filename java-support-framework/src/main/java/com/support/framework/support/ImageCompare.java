@@ -32,17 +32,17 @@ public class ImageCompare {
     private static final int DISTANCE_THRESHOLD = 25;
     private static LinkedList<Rectangle> rectangles = new LinkedList<>();
 
-    public static void compareImage(int errorThreshold, WebDriver driver) {
+    public static void compareImage(WebDriver driver, int errorThreshold) {
         String currentMethodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         Pattern p = Pattern.compile("given|and|when|then");
         Matcher m = p.matcher(currentMethodName);
         if (m.find()) {
             currentMethodName = currentMethodName.substring(m.end());
         }
-        compareImage(currentMethodName, errorThreshold, driver);
+        compareImage(driver, errorThreshold, currentMethodName);
     }
 
-    public static void compareImage(String expectedImage, int errorThreshold, WebDriver driver) {
+    public static void compareImage(WebDriver driver, int errorThreshold, String expectedImage) {
         //ToDo Add Browser size control for Selenium and separate into smaller methods
         File screenShot;
         String deviceName;
@@ -123,17 +123,6 @@ public class ImageCompare {
         }
     }
 
-    private static BufferedImage loadImage(String input) {
-        BufferedImage bufferedImage;
-        try {
-            bufferedImage = ImageIO.read(new File(input));
-            return bufferedImage;
-        } catch (IOException e) {
-            System.err.println("ERROR: could not load " + input);
-        }
-        return null;
-    }
-
     private static void addToRectangles(int x, int y) {
         Rectangle rectangle = findRectangleNearby(x, y);
 
@@ -155,6 +144,25 @@ public class ImageCompare {
         }
     }
 
+    private static Rectangle findRectangleNearby(int x, int y) {
+        for (Rectangle r : rectangles) {
+            if (x > r.x - DISTANCE_THRESHOLD && y > r.y - DISTANCE_THRESHOLD && x < r.x + r.width + DISTANCE_THRESHOLD && y < r.y + r.height + DISTANCE_THRESHOLD)
+                return r;
+        }
+        return null;
+    }
+
+    private static BufferedImage loadImage(String input) {
+        BufferedImage bufferedImage;
+        try {
+            bufferedImage = ImageIO.read(new File(input));
+            return bufferedImage;
+        } catch (IOException e) {
+            System.err.println("ERROR: could not load " + input);
+        }
+        return null;
+    }
+
     private static byte[] saveByteImage(BufferedImage bufferedImage) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -165,12 +173,5 @@ public class ImageCompare {
         return baos.toByteArray();
     }
 
-    private static Rectangle findRectangleNearby(int x, int y) {
-        for (Rectangle r : rectangles) {
-            if (x > r.x - DISTANCE_THRESHOLD && y > r.y - DISTANCE_THRESHOLD && x < r.x + r.width + DISTANCE_THRESHOLD && y < r.y + r.height + DISTANCE_THRESHOLD)
-                return r;
-        }
-        return null;
-    }
-
 }
+

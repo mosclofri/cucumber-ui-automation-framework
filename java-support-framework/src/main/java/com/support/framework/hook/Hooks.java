@@ -19,21 +19,6 @@ public class Hooks {
 
     private static final Logger LOG = Logger.getLogger(Hooks.class);
 
-    private static String captureLog(WebDriver driver) {
-        LOG.info("Capturing device logs");
-        String logType;
-        if (PLATFORM_NAME.toString().equalsIgnoreCase("android"))
-            logType = "logcat";
-        else
-            logType = "syslog";
-        StringBuilder deviceLog = new StringBuilder();
-        List<LogEntry> logEntries = driver.manage().logs().get(logType).getAll();
-        for (LogEntry logLine : logEntries) {
-            deviceLog.append(logLine).append(System.lineSeparator());
-        }
-        return deviceLog.toString();
-    }
-
     public static void hookAfter(WebDriver driver) {
         LOG.info("### " + scenario.getStatus().toUpperCase() + " ###");
         LOG.info("### Ending scenario: " + scenario.getName() + " ###");
@@ -50,6 +35,26 @@ public class Hooks {
         }
     }
 
+    public static void hookBefore(Scenario scenario) {
+        AbstractBase.scenario = scenario;
+        LOG.info("### Starting scenario: " + scenario.getName() + " ###");
+    }
+
+    private static String captureLog(WebDriver driver) {
+        LOG.info("Capturing device logs");
+        String logType;
+        if (PLATFORM_NAME.toString().equalsIgnoreCase("android"))
+            logType = "logcat";
+        else
+            logType = "syslog";
+        StringBuilder deviceLog = new StringBuilder();
+        List<LogEntry> logEntries = driver.manage().logs().get(logType).getAll();
+        for (LogEntry logLine : logEntries) {
+            deviceLog.append(logLine).append(System.lineSeparator());
+        }
+        return deviceLog.toString();
+    }
+
     private static List<String> getScenariosStartWithCaseIds(Collection collection) {
         List<String> list = new ArrayList<>();
         for (Object currentTag : collection) {
@@ -58,11 +63,6 @@ public class Hooks {
             }
         }
         return list;
-    }
-
-    public static void hookBefore(Scenario scenario) {
-        AbstractBase.scenario = scenario;
-        LOG.info("### Starting scenario: " + scenario.getName() + " ###");
     }
 
 }

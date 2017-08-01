@@ -16,12 +16,12 @@ public class PageObjectConstruct {
         return (AndroidDriver) getDriver();
     }
 
-    public AppiumDriver getDriver() {
-        return appiumBase.getDriver();
-    }
-
     public IOSDriver getAsIOSDriver() {
         return (IOSDriver) getDriver();
+    }
+
+    public AppiumDriver getDriver() {
+        return appiumBase.getDriver();
     }
 
     public BaseAppium getHelper() {

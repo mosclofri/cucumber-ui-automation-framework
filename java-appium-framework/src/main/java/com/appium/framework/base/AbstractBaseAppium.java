@@ -33,20 +33,12 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
         setDefaultDriverWaitTime();
     }
 
-    public AppiumDriver<? extends MobileElement> getDriver() {
-        return driver;
-    }
-
     public void androidCheckAll(List<MobileElement> elements) {
         for (MobileElement anElementList : elements) {
             if (!androidIsChecked(anElementList)) {
                 anElementList.click();
             }
         }
-    }
-
-    public Boolean androidIsChecked(MobileElement element) {
-        return Boolean.parseBoolean(element.getAttribute("checked"));
     }
 
     public Boolean androidIsAllChecked(List<MobileElement> elements) {
@@ -56,6 +48,14 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
             }
         }
         return true;
+    }
+
+    public Boolean androidIsChecked(MobileElement element) {
+        return Boolean.parseBoolean(element.getAttribute("checked"));
+    }
+
+    public AppiumDriver<? extends MobileElement> getDriver() {
+        return driver;
     }
 
     public void restartApp() {

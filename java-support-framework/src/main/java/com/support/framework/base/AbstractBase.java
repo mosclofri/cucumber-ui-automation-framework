@@ -8,12 +8,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import static com.support.framework.support.Property.IMPLICIT_WAIT;
-import static com.support.framework.support.Util.threadWait;
-import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractBase<T extends WebElement> {
@@ -27,12 +24,106 @@ public abstract class AbstractBase<T extends WebElement> {
         //LOG.info("Current Driver: " + driver);
     }
 
-    public boolean isContainsText(List<T> element, int index, String text) {
+    public void assertElementNotPresent(T element) {
+        assertTrue(elementNotPresent(element));
+    }
+
+    public void assertElementNotPresent(T element, int duration) {
+        assertTrue(elementNotPresent(element, duration));
+    }
+
+    public void assertElementPresent(T element, int duration) {
+        assertTrue(elementPresent(element, duration));
+    }
+
+    public void assertElementPresent(T element) {
+        assertTrue(elementPresent(element));
+    }
+
+    public void assertElementsNotPresent(List<T> element, int duration) {
+        assertTrue(elementsNotPresent(element, duration));
+    }
+
+    public void assertElementsPresent(List<T> element, int duration) {
+        assertTrue(elementsPresent(element, duration));
+    }
+
+    public void clickOnIfPresent(T element, int duration) {
+        if (elementPresent(element, duration)) {
+            element.click();
+        }
+    }
+
+    public void clickOnIfPresents(List<T> element, int duration, int index) {
+        if (elementsPresent(element, duration)) {
+            element.get(index).click();
+        }
+    }
+
+    public boolean contains(T element, String text) {
+        return element.getText().contains(text);
+    }
+
+    public boolean contains(List<T> element, int index, String text) {
         return element.get(index).getText().contains(text);
     }
 
-    public boolean isContainsText(T element, String text) {
-        return element.getText().contains(text);
+    public boolean elementNotPresent(T element) {
+        try {
+            element.isDisplayed();
+            return false;
+        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+            return true;
+        }
+    }
+
+    public boolean elementNotPresent(T element, int duration) {
+        try {
+            new WebDriverWait(driver, duration)
+                    .until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) element));
+            return false;
+        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+            return true;
+        }
+    }
+
+    public boolean elementPresent(T element, int duration) {
+        try {
+            new WebDriverWait(driver, duration)
+                    .until(ExpectedConditions.visibilityOf(element));
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+            return false;
+        }
+    }
+
+    public boolean elementPresent(T element) {
+        try {
+            element.isDisplayed();
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+            return false;
+        }
+    }
+
+    public boolean elementsNotPresent(List<T> element, int duration) {
+        try {
+            new WebDriverWait(driver, duration)
+                    .until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) element));
+            return false;
+        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+            return true;
+        }
+    }
+
+    public boolean elementsPresent(List<T> element, int duration) {
+        try {
+            new WebDriverWait(driver, duration)
+                    .until(ExpectedConditions.visibilityOfAllElements((List<WebElement>) element));
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+            return false;
+        }
     }
 
     public void navigate(String element) {
@@ -62,95 +153,6 @@ public abstract class AbstractBase<T extends WebElement> {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
-    public void shouldDisplay(T element, int duration) {
-        assertTrue(isElementPresent(element, duration));
-    }
-
-    public boolean isElementPresent(T element, int duration) {
-        try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOf(element));
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    public void shouldDisplay(List<T> element, int index, int duration) {
-        assertTrue(isElementPresent(element, index, duration));
-    }
-
-    public boolean isElementPresent(List<T> element, int index, int duration) {
-        try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOf(element.get(index)));
-            return true;
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
-            return false;
-        }
-    }
-
-    public void shouldDisplay(T element) {
-        assertTrue(isElementPresent(element));
-    }
-
-    public boolean isElementPresent(T element) {
-        try {
-            element.isDisplayed();
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    public void shouldNotDisplay(T element, int duration) {
-        assertTrue(isElementNotPresent(element, duration));
-    }
-
-    public boolean isElementNotPresent(T element, int duration) {
-        try {
-            Long a = currentTimeMillis();
-            while ((currentTimeMillis() - a) / 1000 > duration) {
-                if (!element.isDisplayed()) {
-                    return true;
-                }
-                threadWait(.25);
-            }
-        } catch (NoSuchElementException e) {
-            return true;
-        }
-        return false;
-    }
-
-    public void shouldNotDisplay(T element) {
-        assertTrue(isElementNotPresent(element));
-    }
-
-    public boolean isElementNotPresent(T element) {
-        try {
-            element.isDisplayed();
-            return false;
-        } catch (NoSuchElementException e) {
-            return true;
-        }
-    }
-
-    public void shouldNotDisplay(List<T> element, int index, int duration) {
-        assertTrue(isElementNotPresent(element, index, duration));
-    }
-
-    public boolean isElementNotPresent(List<T> element, int index, int duration) {
-        try {
-            Long a = currentTimeMillis();
-            while ((currentTimeMillis() - a) / 1000 > duration) {
-                if (!element.get(index).isDisplayed())
-                    return true;
-                threadWait(.25);
-            }
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
-            return true;
-        }
-        return false;
-    }
-
 }
+
+

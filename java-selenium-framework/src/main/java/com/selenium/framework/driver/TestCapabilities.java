@@ -7,9 +7,12 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Level;
 
 import static com.support.framework.support.Property.BROWSER_NAME;
+import static com.support.framework.support.Property.GRID_URL;
 import static com.support.framework.support.Property.PLATFORM_NAME;
 import static com.support.framework.support.Property.SELENIUM_LOG;
 
@@ -31,6 +34,14 @@ class TestCapabilities {
         }
     }
 
+    private DesiredCapabilities getDesktopDesiredCapabilities() {
+        LOG.info("Getting Desktop Capabilities");
+        desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setBrowserName(BROWSER_NAME.toString());
+        desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+        return desiredCapabilities;
+    }
+
     private DesiredCapabilities getMobileDesiredCapabilities() {
         LOG.info("Getting Mobile Capabilities");
         desiredCapabilities = new DesiredCapabilities();
@@ -45,12 +56,15 @@ class TestCapabilities {
         return desiredCapabilities;
     }
 
-    private DesiredCapabilities getDesktopDesiredCapabilities() {
-        LOG.info("Getting Desktop Capabilities");
-        desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setBrowserName(BROWSER_NAME.toString());
-        desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
-        return desiredCapabilities;
+    URL getRemoteUrl() {
+        try {
+            String url = "http://" + GRID_URL + "/wd/hub";
+            LOG.info("Grid URL : " + url);
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            System.err.println("Cannot initiate REST http interface listener URL");
+            return null;
+        }
     }
 
 }

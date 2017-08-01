@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 
 import static com.appium.framework.core.AppiumCukes.APPIUM_PORT;
 import static com.support.framework.support.Property.*;
+import static io.appium.java_client.remote.AutomationName.APPIUM;
+import static io.appium.java_client.remote.AutomationName.IOS_XCUI_TEST;
 
 final class TestCapabilities {
 
@@ -34,18 +36,16 @@ final class TestCapabilities {
         }
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
-        if (!GRID_USE.toString().equalsIgnoreCase("true")) {
-            capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
-        }
+        capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
         switch (PLATFORM_NAME.toString().toUpperCase()) {
             case "IOS":
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.IOS_XCUI_TEST);
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, IOS_XCUI_TEST);
                 break;
             case "ANDROID":
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.APPIUM);
-                capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, true);
-                capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true);
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, APPIUM);
+                capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, IGNORE_UNIMPORTANT_VIEWS);
+                capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, NATIVE_WEB_SCREENSHOT);
                 break;
             default:
                 Assert.fail("Current test platform is not supported: " + PLATFORM_NAME);

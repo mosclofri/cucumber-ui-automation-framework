@@ -2,11 +2,14 @@ package com.support.framework.base;
 
 import cucumber.api.Scenario;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,12 +43,37 @@ public abstract class AbstractBase<T extends WebElement> {
         assertTrue(elementPresent(element));
     }
 
-    public void assertElementsNotPresent(List<T> element, int duration) {
-        assertTrue(elementsNotPresent(element, duration));
+    public void assertElementsNotPresent(List<T> element, int index, int duration) {
+        assertTrue(elementsNotPresent(element, index, duration));
     }
 
-    public void assertElementsPresent(List<T> element, int duration) {
-        assertTrue(elementsPresent(element, duration));
+    public void assertElementsPresent(List<T> element, int index, int duration) {
+        assertTrue(elementsPresent(element, index, duration));
+    }
+
+    public boolean assertMultipleElementsWithAnd(int duration, T... args) {
+        ExpectedCondition[] expected = getExpectedConditions(args);
+        try {
+            new WebDriverWait(driver, duration).until(ExpectedConditions.and(expected));
+            return true;
+        } catch (NoSuchElementException ignore) {
+            return false;
+        }
+    }
+
+    public boolean assertMultipleElementsWithOr(int duration, T... args) {
+        ExpectedCondition[] expected = getExpectedConditions(args);
+        try {
+            new WebDriverWait(driver, duration).until(ExpectedConditions.or(expected));
+            return true;
+        } catch (NoSuchElementException ignore) {
+            return false;
+        }
+    }
+
+    public void assertVisibleAndInvisibleElement(T visibleElement, T invisibleElement, int duration) {
+        ExpectedCondition<Boolean> expectation = driver -> (visibleElement.isDisplayed() && !invisibleElement.isDisplayed());
+        new WebDriverWait(driver, duration).until(expectation);
     }
 
     public void clickOnIfPresent(T element, int duration) {
@@ -55,7 +83,7 @@ public abstract class AbstractBase<T extends WebElement> {
     }
 
     public void clickOnIfPresents(List<T> element, int duration, int index) {
-        if (elementsPresent(element, duration)) {
+        if (elementsPresent(element, index, duration)) {
             element.get(index).click();
         }
     }
@@ -72,7 +100,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             element.isDisplayed();
             return false;
-        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+        } catch (NoSuchElementException ignore) {
             return true;
         }
     }
@@ -80,9 +108,9 @@ public abstract class AbstractBase<T extends WebElement> {
     public boolean elementNotPresent(T element, int duration) {
         try {
             new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) element));
+                    .until(ExpectedConditions.invisibilityOf(element));
             return false;
-        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
             return true;
         }
     }
@@ -92,7 +120,7 @@ public abstract class AbstractBase<T extends WebElement> {
             new WebDriverWait(driver, duration)
                     .until(ExpectedConditions.visibilityOf(element));
             return true;
-        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+        } catch (NoSuchElementException ignore) {
             return false;
         }
     }
@@ -101,27 +129,27 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             element.isDisplayed();
             return true;
-        } catch (org.openqa.selenium.NoSuchElementException ignore) {
+        } catch (NoSuchElementException ignore) {
             return false;
         }
     }
 
-    public boolean elementsNotPresent(List<T> element, int duration) {
+    public boolean elementsNotPresent(List<T> element, int index, int duration) {
         try {
             new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) element));
+                    .until(ExpectedConditions.invisibilityOf(element.get(index)));
             return false;
-        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
             return true;
         }
     }
 
-    public boolean elementsPresent(List<T> element, int duration) {
+    public boolean elementsPresent(List<T> element, int index, int duration) {
         try {
             new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOfAllElements((List<WebElement>) element));
+                    .until(ExpectedConditions.visibilityOf(element.get(index)));
             return true;
-        } catch (org.openqa.selenium.NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
             return false;
         }
     }
@@ -151,6 +179,15 @@ public abstract class AbstractBase<T extends WebElement> {
     public void setDriverWaitTime(int duration) {
         LOG.info("Setting implicit wait time for driver: '" + duration + "'");
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
+    }
+
+    private ExpectedCondition[] getExpectedConditions(T[] args) {
+        List<T> elements = Arrays.asList(args);
+        ExpectedCondition[] expected = new ExpectedCondition[elements.size()];
+        for (int i = 0; i < elements.size(); i++) {
+            expected[i] = ExpectedConditions.visibilityOf(elements.get(i));
+        }
+        return expected;
     }
 
 }

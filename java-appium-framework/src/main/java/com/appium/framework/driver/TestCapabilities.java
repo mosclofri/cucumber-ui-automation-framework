@@ -44,8 +44,8 @@ final class TestCapabilities {
                 break;
             case "ANDROID":
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, APPIUM);
-                capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, IGNORE_UNIMPORTANT_VIEWS);
-                capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, NATIVE_WEB_SCREENSHOT);
+                capabilities.setCapability(AndroidMobileCapabilityType.IGNORE_UNIMPORTANT_VIEWS, IGNORE_UNIMPORTANT_VIEWS.toBoolean());
+                capabilities.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, NATIVE_WEB_SCREENSHOT.toBoolean());
                 break;
             default:
                 Assert.fail("Current test platform is not supported: " + PLATFORM_NAME);

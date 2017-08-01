@@ -42,7 +42,14 @@ public enum Property {
         if (stringIsEmpty(value)) {
             Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
         }
-        return Integer.valueOf(value);
+        return Integer.parseInt(value);
+    }
+
+    public boolean toBoolean() {
+        if (stringIsEmpty(value)) {
+            Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
+        }
+        return Boolean.parseBoolean(value);
     }
 
     @Override

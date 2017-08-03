@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <prerequisites>
-        <maven>3.0</maven>
+        <maven>3.0.4</maven>
     </prerequisites>
 
     <modules>
@@ -21,7 +21,7 @@
         <appium-java-version>5.0.0-BETA9</appium-java-version>
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
-        <compiler-version>3.6.1</compiler-version>
+        <compiler-version>3.6.2</compiler-version>
         <cucumber-version>1.2.5</cucumber-version>
         <deploy-plugin-version>2.8.2</deploy-plugin-version>
         <drivermanager-version>1.7.1</drivermanager-version>

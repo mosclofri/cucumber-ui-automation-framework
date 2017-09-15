@@ -23,7 +23,10 @@
         <commons-lang3-version>3.6</commons-lang3-version>
         <compiler-version>3.7.0</compiler-version>
         <cucumber-version>2.0.0</cucumber-version>
+        <deploy-plugin-version>2.8.2</deploy-plugin-version>
         <drivermanager-version>1.7.1</drivermanager-version>
+        <github-maven-version>0.12</github-maven-version>
+        <github.global.server>github</github.global.server>
         <jfairy-version>0.5.7</jfairy-version>
         <log4j-version>1.2.17</log4j-version>
         <maven-version-plugin>2.4</maven-version-plugin>
@@ -203,6 +206,35 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${deploy-plugin-version}</version>
+                    <configuration>
+                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>${github-maven-version}</version>
+                    <configuration>
+                        <message>Maven artifacts for ${maven.build.timestamp}</message>
+                        <noJekyll>true</noJekyll>
+                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+                        <branch>refs/heads/mvn-repo</branch>
+                        <merge>true</merge>
+                        <repositoryName>cucumber-ui-automation-framework</repositoryName>
+                        <repositoryOwner>mosclofri</repositoryOwner>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <phase>deploy</phase>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -223,6 +255,15 @@
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
+                <inherited>true</inherited>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
                 <inherited>true</inherited>
             </plugin>
         </plugins>

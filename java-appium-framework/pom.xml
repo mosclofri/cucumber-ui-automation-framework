@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.mosclofri</groupId>
         <artifactId>cucumber-ui-automation-framework</artifactId>
-        <version>0.6.4</version>
+        <version>0.7.0</version>
     </parent>
 
     <artifactId>java-appium-framework</artifactId>
@@ -16,11 +16,26 @@
             <groupId>com.github.mosclofri</groupId>
             <artifactId>java-support-framework</artifactId>
             <version>${project.parent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-support</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
-            <version>${appium-java-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

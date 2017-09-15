@@ -4,7 +4,7 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-ui-automation-framework</artifactId>
-    <version>0.6.4</version>
+    <version>0.7.0</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -18,26 +18,127 @@
     </modules>
 
     <properties>
-        <appium-java-version>5.0.0-BETA9</appium-java-version>
+        <appium-java-version>5.0.2</appium-java-version>
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
-        <compiler-version>3.6.2</compiler-version>
-        <cucumber-version>1.2.5</cucumber-version>
-        <deploy-plugin-version>2.8.2</deploy-plugin-version>
+        <compiler-version>3.7.0</compiler-version>
+        <cucumber-version>2.0.0</cucumber-version>
         <drivermanager-version>1.7.1</drivermanager-version>
-        <github-maven-version>0.12</github-maven-version>
-        <github.global.server>github</github.global.server>
         <jfairy-version>0.5.7</jfairy-version>
         <log4j-version>1.2.17</log4j-version>
         <maven-version-plugin>2.4</maven-version-plugin>
-        <reporting-version>3.8.0</reporting-version>
-        <selenium-java-version>3.4.0</selenium-java-version>
-        <selenium-support-version>3.4.0</selenium-support-version>
+        <reporting-version>3.10.0</reporting-version>
+        <selenium-java-version>3.5.3</selenium-java-version>
+        <selenium-support-version>3.5.3</selenium-support-version>
         <slf4j-api-version>1.7.5</slf4j-api-version>
         <sortpom-plugin-version>2.8.0</sortpom-plugin-version>
         <spring-version>4.3.10.RELEASE</spring-version>
         <surefire-version>2.20</surefire-version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>${selenium-support-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.appium</groupId>
+                <artifactId>java-client</artifactId>
+                <version>${appium-java-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-io</groupId>
+                        <artifactId>commons-io</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium-java-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-core</artifactId>
+                <version>${cucumber-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>${cucumber-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>${cucumber-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.bonigarcia</groupId>
+                <artifactId>webdrivermanager</artifactId>
+                <version>${drivermanager-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codearte.jfairy</groupId>
+                <artifactId>jfairy</artifactId>
+                <version>${jfairy-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j-api-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
@@ -50,6 +151,7 @@
                         <predefinedSortOrder>custom_1</predefinedSortOrder>
                         <lineSeparator>\n</lineSeparator>
                         <nrOfIndentSpace>4</nrOfIndentSpace>
+                        <sortDependencies>false</sortDependencies>
                         <sortProperties>true</sortProperties>
                         <keepBlankLines>true</keepBlankLines>
                         <sortModules>true</sortModules>
@@ -91,42 +193,13 @@
                             <goals>
                                 <goal>generate</goal>
                             </goals>
-                            <phase>test</phase>
+                            <phase>verify</phase>
                             <configuration>
                                 <projectName>${project.artifactId}</projectName>
                                 <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
                                 <cucumberOutput>${project.build.directory}/</cucumberOutput>
                                 <parallelTesting>false</parallelTesting>
                             </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${deploy-plugin-version}</version>
-                    <configuration>
-                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.github</groupId>
-                    <artifactId>site-maven-plugin</artifactId>
-                    <version>${github-maven-version}</version>
-                    <configuration>
-                        <message>Maven artifacts for ${maven.build.timestamp}</message>
-                        <noJekyll>true</noJekyll>
-                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-                        <branch>refs/heads/mvn-repo</branch>
-                        <merge>true</merge>
-                        <repositoryName>cucumber-ui-automation-framework</repositoryName>
-                        <repositoryOwner>mosclofri</repositoryOwner>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>site</goal>
-                            </goals>
-                            <phase>deploy</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -150,15 +223,6 @@
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <inherited>true</inherited>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
                 <inherited>true</inherited>
             </plugin>
         </plugins>

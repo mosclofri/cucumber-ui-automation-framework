@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.support.framework.support.CmdLine.executeShellReturnStringResult;
+import static com.support.framework.support.CmdLine.executeShellCommand;
 import static com.support.framework.support.Property.COMPARE_IMAGE;
 import static com.support.framework.support.Property.DEVICE_NAME;
 import static com.support.framework.support.Property.PLATFORM_NAME;
@@ -49,7 +49,7 @@ public class ImageCompare {
 
         if (COMPARE_IMAGE.toString().matches("true|record")) {
             if (PLATFORM_NAME.toString().equalsIgnoreCase("android")) {
-                deviceName = executeShellReturnStringResult("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.product.model");
+                deviceName = executeShellCommand("adb -s " + DEVICE_NAME.toString() + " shell getprop ro.product.model");
             } else {
                 deviceName = DEVICE_NAME.toString();
             }
@@ -172,6 +172,5 @@ public class ImageCompare {
         }
         return baos.toByteArray();
     }
-
 }
 

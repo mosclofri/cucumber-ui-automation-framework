@@ -29,6 +29,5 @@ public class DataGenerator {
     public static String getRandomSentence(int worldCount) {
         return fairy.textProducer().sentence(worldCount);
     }
-
 }
 

@@ -11,6 +11,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static java.time.Duration.ofSeconds;
+
 @Component
 @Scope("cucumber-glue")
 public class BaseAppium extends AbstractBaseAppium implements DriverInterface<MobileElement> {
@@ -18,7 +20,6 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface<Mo
     private static final Logger LOG = Logger.getLogger(BaseAppium.class);
     private final double FIRST_MULTIPLIER = 0.80;
     private final double SECOND_MULTIPLIER = 0.20;
-    private final int SWIPE_DURATION = 1000;
 
     public BaseAppium(AppiumDriver<? extends MobileElement> driver) {
         super(driver);
@@ -31,9 +32,9 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface<Mo
     }
 
     @Override
-    public void longPress(MobileElement element, int duration) {
-        TouchAction touchAction = new TouchAction(getDriver());
-        touchAction.longPress(element, duration).perform().perform();
+    public void longPress(MobileElement element, int seconds) {
+        TouchAction action = new TouchAction(getDriver());
+        action.longPress(element, ofSeconds(seconds)).perform().release();
     }
 
     @Override
@@ -58,17 +59,21 @@ public class BaseAppium extends AbstractBaseAppium implements DriverInterface<Mo
 
     private void swipeLeftOrRight(double first, double second) {
         Dimension dimensions = getDriver().manage().window().getSize();
-        int startx = (int) (dimensions.width * first);
-        int endx = (int) (dimensions.width * second);
-        int starty = dimensions.height / 2;
-        getDriver().swipe(startx, starty, endx, starty, SWIPE_DURATION);
+        int startX = (int) (dimensions.width * first);
+        int endX = (int) (dimensions.width * second);
+        int startY = dimensions.height / 2;
+
+        TouchAction touchAction = new TouchAction(getDriver());
+        touchAction.press(startX, startY).moveTo(endX, startY).perform().release();
     }
 
     private void swipeUpOrDown(double first, double second) {
         Dimension dimensions = getDriver().manage().window().getSize();
-        int scrollStart = (int) (dimensions.getHeight() * first);
-        int scrollEnd = (int) (dimensions.getHeight() * second);
-        getDriver().swipe(0, scrollStart, 0, scrollEnd, SWIPE_DURATION);
-    }
+        int startY = (int) (dimensions.getHeight() * first);
+        int endY = (int) (dimensions.getHeight() * second);
+        int startX = dimensions.width / 2;
 
+        TouchAction touchAction = new TouchAction(getDriver());
+        touchAction.press(startX, startY).moveTo(startX, endY).perform().release();
+    }
 }

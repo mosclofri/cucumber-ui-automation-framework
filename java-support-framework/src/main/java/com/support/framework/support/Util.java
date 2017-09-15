@@ -32,17 +32,6 @@ public class Util {
         return currentPort;
     }
 
-    public static URL getRemoteUrl() {
-        try {
-            String url = "http://" + GRID_URL + "/wd/hub";
-            LOG.info("Grid URL : " + url);
-            return new URL(url);
-        } catch (MalformedURLException e) {
-            System.err.println("Cannot initiate REST http interface listener URL");
-            return null;
-        }
-    }
-
     public static void logCucumberStep() {
         StackTraceElement stackTraceElements = Thread.currentThread().getStackTrace()[2];
         String methodName = StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(stackTraceElements.getMethodName()), ' ');
@@ -74,5 +63,4 @@ public class Util {
             e.printStackTrace();
         }
     }
-
 }

@@ -47,5 +47,4 @@ public class BaseSelenium extends AbstractBaseSelenium implements DriverInterfac
     public void swipeUp() {
         //ToDo
     }
-
 }

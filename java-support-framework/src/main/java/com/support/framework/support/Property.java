@@ -22,6 +22,8 @@ public enum Property {
     IGNORE_UNIMPORTANT_VIEWS(Optional.ofNullable(System.getProperty("ignore.unimportant.views")).orElse("false")),
     NATIVE_WEB_SCREENSHOT(Optional.ofNullable(System.getProperty("native.web.screenshot")).orElse("false")),
     APPIUM_LOG(Optional.ofNullable(System.getProperty("appium.log")).orElse("warn")),
+    XCODE_ORG_ID(System.getProperty("xcode.org.id")),
+    XCODE_SIGNING_ID(System.getProperty("xcode.signing.id")),
 
     //Selenium Specific
     BROWSER_NAME(Optional.ofNullable(System.getProperty("browser.name")).orElse("Chrome")),
@@ -52,14 +54,12 @@ public enum Property {
         return Boolean.parseBoolean(value);
     }
 
-    @Override
     public String toString() {
         if (stringIsEmpty(value)) {
             Assert.fail("Property " + this.name() + " is missing. Check your your pom.xml");
         }
         return value;
     }
-
 }
 
 

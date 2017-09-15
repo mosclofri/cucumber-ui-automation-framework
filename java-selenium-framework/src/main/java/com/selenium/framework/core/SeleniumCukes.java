@@ -13,7 +13,7 @@ import static com.support.framework.support.Property.BROWSER_NAME;
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
-        glue = {"com.selenium.test.stepdefs", "com.selenium.framework.stepdefs"},
+        glue = {"com.selenium.test.stepdefs", "com.selenium.framework.hook"},
         tags = {"~@ignore"})
 public class SeleniumCukes {
 
@@ -28,5 +28,4 @@ public class SeleniumCukes {
     public static void stopSelenium() {
         LOG.info("### Stopping Selenium ###");
     }
-
 }

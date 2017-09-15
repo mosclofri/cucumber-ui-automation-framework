@@ -12,12 +12,8 @@ public class PageObjectConstruct {
     @Autowired
     public BaseAppium appiumBase;
 
-    public AndroidDriver getAsAndroidDriver() {
+    public AndroidDriver getAndroidDriver() {
         return (AndroidDriver) getDriver();
-    }
-
-    public IOSDriver getAsIOSDriver() {
-        return (IOSDriver) getDriver();
     }
 
     public AppiumDriver getDriver() {
@@ -28,9 +24,12 @@ public class PageObjectConstruct {
         return appiumBase;
     }
 
+    public IOSDriver getIOSDriver() {
+        return (IOSDriver) getDriver();
+    }
+
     @PostConstruct
     private void init() {
         appiumBase.initPageFactoryElements(this);
     }
-
 }

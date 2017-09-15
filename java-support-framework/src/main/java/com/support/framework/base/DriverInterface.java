@@ -13,5 +13,4 @@ public interface DriverInterface<T> {
     void swipeRight();
 
     void swipeUp();
-
 }

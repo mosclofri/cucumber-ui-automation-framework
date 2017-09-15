@@ -18,7 +18,7 @@ import static com.support.framework.support.Util.getPort;
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
         glue = {"com.appium.test.stepdefs", "com.appium.framework.stepdefs"},
-        tags = {"~@ignore"})
+        tags = {"not @ignore"})
 public class AppiumCukes {
 
     private static final Logger LOG = Logger.getLogger(AppiumCukes.class);
@@ -41,7 +41,6 @@ public class AppiumCukes {
         APPIUM_PORT = getPort(Property.APPIUM_PORT.toInt());
         LOG.info("Appium Host: " + APPIUM_HOST + " & Port: " + APPIUM_PORT + " & Log Level: " + APPIUM_LOG);
         LOG.info("Platform: " + PLATFORM_NAME + " & Test Device: " + DEVICE_NAME);
-        LOG.info("Application In Test: " + APP_FILE);
         LOG.info("Keep App State Between Scenarios: " + NO_RESET + " & Compare Image Status: " + COMPARE_IMAGE);
         startAppiumServer();
     }
@@ -51,5 +50,4 @@ public class AppiumCukes {
         LOG.info("### Stopping Appium ###");
         stopAppiumServer();
     }
-
 }

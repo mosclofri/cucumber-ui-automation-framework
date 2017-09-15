@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 
 import static com.appium.framework.core.AppiumCukes.APPIUM_PORT;
 import static com.support.framework.support.Property.*;
+import static com.support.framework.support.Property.XCODE_ORG_ID;
+import static com.support.framework.support.Property.XCODE_SIGNING_ID;
 import static io.appium.java_client.remote.AutomationName.APPIUM;
 import static io.appium.java_client.remote.AutomationName.IOS_XCUI_TEST;
 
@@ -37,10 +39,13 @@ final class TestCapabilities {
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
         capabilities.setCapability(MobileCapabilityType.UDID, DEVICE_NAME);
-        capabilities.setCapability(MobileCapabilityType.NO_RESET, Boolean.valueOf(NO_RESET.toString()));
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, NO_RESET.toBoolean());
         switch (PLATFORM_NAME.toString().toUpperCase()) {
             case "IOS":
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, IOS_XCUI_TEST);
+                capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, PLATFORM_VERSION);
+                capabilities.setCapability("xcodeOrgId", XCODE_ORG_ID);
+                capabilities.setCapability("xcodeSigningId", XCODE_SIGNING_ID);
                 break;
             case "ANDROID":
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, APPIUM);
@@ -61,5 +66,4 @@ final class TestCapabilities {
             return null;
         }
     }
-
 }

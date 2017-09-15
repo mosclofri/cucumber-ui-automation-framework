@@ -68,5 +68,4 @@ abstract class AbstractBaseSelenium extends AbstractBase<WebElement> {
             LOG.warn("Timeout while waiting for Page Load Request to complete");
         }
     }
-
 }

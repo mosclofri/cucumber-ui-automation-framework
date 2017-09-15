@@ -43,37 +43,12 @@ public abstract class AbstractBase<T extends WebElement> {
         assertTrue(elementPresent(element));
     }
 
-    public void assertElementsNotPresent(List<T> element, int index, int duration) {
-        assertTrue(elementsNotPresent(element, index, duration));
+    public void assertElementsNotPresent(List<T> elements, int duration) {
+        assertTrue(elementsNotPresent(elements, duration));
     }
 
-    public void assertElementsPresent(List<T> element, int index, int duration) {
-        assertTrue(elementsPresent(element, index, duration));
-    }
-
-    public boolean assertMultipleElementsWithAnd(int duration, T... args) {
-        ExpectedCondition[] expected = getExpectedConditions(args);
-        try {
-            new WebDriverWait(driver, duration).until(ExpectedConditions.and(expected));
-            return true;
-        } catch (NoSuchElementException ignore) {
-            return false;
-        }
-    }
-
-    public boolean assertMultipleElementsWithOr(int duration, T... args) {
-        ExpectedCondition[] expected = getExpectedConditions(args);
-        try {
-            new WebDriverWait(driver, duration).until(ExpectedConditions.or(expected));
-            return true;
-        } catch (NoSuchElementException ignore) {
-            return false;
-        }
-    }
-
-    public void assertVisibleAndInvisibleElement(T visibleElement, T invisibleElement, int duration) {
-        ExpectedCondition<Boolean> expectation = driver -> (visibleElement.isDisplayed() && !invisibleElement.isDisplayed());
-        new WebDriverWait(driver, duration).until(expectation);
+    public void assertElementsPresent(List<T> elements, int duration) {
+        assertTrue(elementsPresent(elements, duration));
     }
 
     public void clickOnIfPresent(T element, int duration) {
@@ -83,7 +58,7 @@ public abstract class AbstractBase<T extends WebElement> {
     }
 
     public void clickOnIfPresents(List<T> element, int duration, int index) {
-        if (elementsPresent(element, index, duration)) {
+        if (elementsPresent(element, duration)) {
             element.get(index).click();
         }
     }
@@ -92,8 +67,8 @@ public abstract class AbstractBase<T extends WebElement> {
         return element.getText().contains(text);
     }
 
-    public boolean contains(List<T> element, int index, String text) {
-        return element.get(index).getText().contains(text);
+    public boolean contains(List<T> elements, int index, String text) {
+        return elements.get(index).getText().contains(text);
     }
 
     public boolean elementNotPresent(T element) {
@@ -107,18 +82,16 @@ public abstract class AbstractBase<T extends WebElement> {
 
     public boolean elementNotPresent(T element, int duration) {
         try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.invisibilityOf(element));
+            new WebDriverWait(driver, duration).until(ExpectedConditions.invisibilityOf(element));
             return false;
-        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException ignore) {
             return true;
         }
     }
 
     public boolean elementPresent(T element, int duration) {
         try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOf(element));
+            new WebDriverWait(driver, duration).until(ExpectedConditions.visibilityOf(element));
             return true;
         } catch (NoSuchElementException ignore) {
             return false;
@@ -134,41 +107,41 @@ public abstract class AbstractBase<T extends WebElement> {
         }
     }
 
-    public boolean elementsNotPresent(List<T> element, int index, int duration) {
+    public boolean elementsNotPresent(List<T> elements, int duration) {
         try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.invisibilityOf(element.get(index)));
+            new WebDriverWait(driver, duration).until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) elements));
             return false;
         } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
             return true;
         }
     }
 
-    public boolean elementsPresent(List<T> element, int index, int duration) {
+    public boolean elementsPresent(List<T> elements, int duration) {
         try {
-            new WebDriverWait(driver, duration)
-                    .until(ExpectedConditions.visibilityOf(element.get(index)));
+            new WebDriverWait(driver, duration).until(ExpectedConditions.visibilityOfAllElements((List<WebElement>) elements));
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
             return false;
         }
     }
 
-    public void navigate(String element) {
+    public boolean multipleElementsWithAnd(int duration, T... args) {
+        ExpectedCondition[] expected = getExpectedConditions(args);
+        try {
+            new WebDriverWait(driver, duration).until(ExpectedConditions.and(expected));
+            return true;
+        } catch (NoSuchElementException ignore) {
+            return false;
+        }
+    }
 
-        switch (element) {
-            case "Back":
-                LOG.info("Navigating back");
-                driver.navigate().back();
-                break;
-            case "Forward":
-                LOG.info("Navigating forward");
-                driver.navigate().forward();
-                break;
-            default:
-                LOG.info("Navigating to element: " + element);
-                driver.navigate().to(element);
-                break;
+    public boolean multipleElementsWithOr(int duration, T... args) {
+        ExpectedCondition[] expected = getExpectedConditions(args);
+        try {
+            new WebDriverWait(driver, duration).until(ExpectedConditions.or(expected));
+            return true;
+        } catch (NoSuchElementException ignore) {
+            return false;
         }
     }
 
@@ -181,6 +154,16 @@ public abstract class AbstractBase<T extends WebElement> {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
+    public boolean visibleAndInvisibleElement(T visibleElement, T invisibleElement, int duration) {
+        ExpectedCondition<Boolean> expectation = driver -> (visibleElement.isDisplayed() && !invisibleElement.isDisplayed());
+        try {
+            new WebDriverWait(driver, duration).until(expectation);
+            return true;
+        } catch (NoSuchElementException ignore) {
+            return false;
+        }
+    }
+
     private ExpectedCondition[] getExpectedConditions(T[] args) {
         List<T> elements = Arrays.asList(args);
         ExpectedCondition[] expected = new ExpectedCondition[elements.size()];
@@ -189,7 +172,6 @@ public abstract class AbstractBase<T extends WebElement> {
         }
         return expected;
     }
-
 }
 
 

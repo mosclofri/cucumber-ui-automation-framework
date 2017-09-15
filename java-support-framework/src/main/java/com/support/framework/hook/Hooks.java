@@ -20,7 +20,7 @@ public class Hooks {
     private static final Logger LOG = Logger.getLogger(Hooks.class);
 
     public static void hookAfter(WebDriver driver) {
-        LOG.info("### " + scenario.getStatus().toUpperCase() + " ###");
+        LOG.info("### " + scenario.getStatus() + " ###");
         LOG.info("### Ending scenario: " + scenario.getName() + " ###");
         List<String> caseList = getScenariosStartWithCaseIds(scenario.getSourceTagNames());
         for (String currentTag : caseList) {
@@ -64,5 +64,4 @@ public class Hooks {
         }
         return list;
     }
-
 }

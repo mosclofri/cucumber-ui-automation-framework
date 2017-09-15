@@ -1,6 +1,7 @@
 package com.appium.framework.core;
 
 import com.support.framework.support.Property;
+import com.support.framework.support.Util;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
@@ -20,17 +21,17 @@ public final class AppiumServer {
         if (Property.PLATFORM_NAME.toString().equalsIgnoreCase("android")) {
             service = buildService(new AppiumServiceBuilder()
                     .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG.toString())
-                    .withArgument(GeneralServerFlag.NO_PERMS_CHECKS)
                     .withArgument(GeneralServerFlag.SESSION_OVERRIDE)
-                    .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(getPort(0)))
+                    .withArgument(GeneralServerFlag.NO_PERMS_CHECKS)
                     .withArgument(AndroidServerFlag.SUPPRESS_ADB_KILL_SERVER)
+                    .withArgument(AndroidServerFlag.BOOTSTRAP_PORT_NUMBER, String.valueOf(Util.getPort(0)))
                     .withIPAddress(APPIUM_HOST.toString())
                     .usingPort(APPIUM_PORT));
         } else {
             service = buildService(new AppiumServiceBuilder()
                     .withArgument(GeneralServerFlag.LOG_LEVEL, APPIUM_LOG.toString())
-                    .withArgument(GeneralServerFlag.NO_PERMS_CHECKS)
                     .withArgument(GeneralServerFlag.SESSION_OVERRIDE)
+                    .withArgument(GeneralServerFlag.NO_PERMS_CHECKS)
                     .withIPAddress(APPIUM_HOST.toString())
                     .usingPort(APPIUM_PORT));
         }
@@ -45,5 +46,4 @@ public final class AppiumServer {
             service.stop();
         }
     }
-
 }

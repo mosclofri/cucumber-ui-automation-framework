@@ -66,5 +66,4 @@ class TestCapabilities {
             return null;
         }
     }
-
 }

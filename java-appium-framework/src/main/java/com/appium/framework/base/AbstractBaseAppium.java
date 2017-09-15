@@ -1,6 +1,7 @@
 package com.appium.framework.base;
 
 import com.support.framework.base.AbstractBase;
+import com.support.framework.support.Property;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.apache.log4j.Logger;
@@ -58,6 +59,14 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
         return driver;
     }
 
+    public boolean isPlatformAndroid() {
+        return (Property.PLATFORM_NAME.toString().equalsIgnoreCase("android"));
+    }
+
+    public boolean isPlatformIOS() {
+        return (Property.PLATFORM_NAME.toString().equalsIgnoreCase("ios"));
+    }
+
     public void restartApp() {
         driver.closeApp();
         driver.launchApp();
@@ -79,5 +88,4 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
         LOG.info("Switching context to NATIVE_APP");
         driver.context("NATIVE_APP");
     }
-
 }

@@ -17,7 +17,7 @@ import static com.support.framework.support.Util.getPort;
 @CucumberOptions(
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
-        glue = {"com.appium.test.stepdefs", "com.appium.framework.stepdefs"},
+        glue = {"com.appium.test.stepdefs", "com.appium.framework.hook"},
         tags = {"not @ignore"})
 public class AppiumCukes {
 

@@ -10,7 +10,7 @@ public enum Property {
 
     PLATFORM_NAME(System.getProperty("platform.name")),
     PLATFORM_VERSION(System.getProperty("platform.version")),
-    IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("1")),
+    IMPLICIT_WAIT(Optional.ofNullable(System.getProperty("implicit.wait")).orElse("3")),
     COMPARE_IMAGE(Optional.ofNullable(System.getProperty("compare.image")).orElse("false")),
 
     //Appium Specific
@@ -31,6 +31,8 @@ public enum Property {
     GRID_URL(System.getProperty("grid.url")),
     GRID_USE(System.getProperty("grid.use")),
     SELENIUM_LOG(Optional.ofNullable(System.getProperty("selenium.log")).orElse("WARNING")),
+    BROWSER_HEIGHT(System.getProperty("browser.height")),
+    BROWSER_WIDTH(System.getProperty("browser.width")),
 
     TESTRAIL_URL(System.getProperty("testrail.url"));
 

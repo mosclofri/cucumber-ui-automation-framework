@@ -1,10 +1,26 @@
 package com.support.framework.support;
 
 import io.codearte.jfairy.Fairy;
+import io.codearte.jfairy.producer.person.Person;
 
-public class DataGenerator {
+public class DataFactory {
 
+    private static final String CURRENT_PERSON = "CURRENT_PERSON";
     private static Fairy fairy = Fairy.create();
+
+    public static Person getCurrentPerson() {
+        return ThreadLocalMap.getItem(CURRENT_PERSON, Person.class);
+    }
+
+    public static void setCurrentPerson(Person person) {
+        ThreadLocalMap.getMap().put(CURRENT_PERSON, person);
+    }
+
+    public static Person getPerson() {
+        Person person = fairy.person();
+        setCurrentPerson(person);
+        return person;
+    }
 
     public static String getRandomEmail() {
         return fairy.person().getEmail();

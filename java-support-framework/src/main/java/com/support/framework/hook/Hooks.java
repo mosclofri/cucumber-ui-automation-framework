@@ -1,6 +1,7 @@
 package com.support.framework.hook;
 
 import com.support.framework.base.AbstractBase;
+import com.support.framework.support.ThreadLocalMap;
 import cucumber.api.Scenario;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -33,6 +34,7 @@ public class Hooks {
                 scenario.embed(captureLog(driver).getBytes(StandardCharsets.UTF_8), "text/html");
             }*/
         }
+        ThreadLocalMap.cleanup();
     }
 
     public static void hookBefore(Scenario scenario) {

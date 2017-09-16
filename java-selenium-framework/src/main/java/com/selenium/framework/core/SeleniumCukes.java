@@ -14,7 +14,7 @@ import static com.support.framework.support.Property.BROWSER_NAME;
         plugin = "json:target/cucumber.json",
         features = {"classpath:features"},
         glue = {"com.selenium.test.stepdefs", "com.selenium.framework.hook"},
-        tags = {"~@ignore"})
+        tags = {"not @ignore"})
 public class SeleniumCukes {
 
     private static final Logger LOG = Logger.getLogger(SeleniumCukes.class);

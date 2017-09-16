@@ -6,6 +6,7 @@ import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 import io.github.bonigarcia.wdm.OperaDriverManager;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -19,7 +20,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static com.support.framework.support.Property.BROWSER_HEIGHT;
 import static com.support.framework.support.Property.BROWSER_NAME;
+import static com.support.framework.support.Property.BROWSER_WIDTH;
 import static com.support.framework.support.Property.GRID_USE;
 
 @Component
@@ -70,6 +73,10 @@ class SeleniumDriverUtils {
             }
         }
         driver.manage().deleteAllCookies();
+        if (BROWSER_WIDTH != null && BROWSER_HEIGHT != null) {
+            LOG.info("Resizing browser to: " + BROWSER_WIDTH +"x"+BROWSER_HEIGHT);
+            driver.manage().window().setSize(new Dimension(BROWSER_WIDTH.toInt(), BROWSER_HEIGHT.toInt()));
+        }
         return driver;
     }
 }

@@ -4,7 +4,7 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-ui-automation-framework</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.5</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -18,7 +18,7 @@
     </modules>
 
     <properties>
-        <appium-java-version>5.0.2</appium-java-version>
+        <appium-java-version>5.0.3</appium-java-version>
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
         <compiler-version>3.7.0</compiler-version>

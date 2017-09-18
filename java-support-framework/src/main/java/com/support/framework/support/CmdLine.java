@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static com.support.framework.support.Property.DEVICE_NAME;
 
-public class CmdLine {
+public final class CmdLine {
 
     public static String executeShellCommand(String command) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

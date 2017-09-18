@@ -7,7 +7,8 @@ public final class ThreadLocalMap {
 
     private static ThreadLocal<HashMap<String, Object>> threadLocalMap = ThreadLocal.withInitial(HashMap::new);
 
-    private ThreadLocalMap() {}
+    private ThreadLocalMap() {
+    }
 
     public static void cleanup() {
         threadLocalMap.remove();

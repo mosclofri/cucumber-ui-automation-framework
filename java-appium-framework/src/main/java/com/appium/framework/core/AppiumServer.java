@@ -10,10 +10,9 @@ import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import static com.appium.framework.core.AppiumCukes.APPIUM_PORT;
 import static com.support.framework.support.Property.APPIUM_HOST;
 import static com.support.framework.support.Property.APPIUM_LOG;
-import static com.support.framework.support.Util.getPort;
 import static io.appium.java_client.service.local.AppiumDriverLocalService.buildService;
 
-public final class AppiumServer {
+final class AppiumServer {
 
     private final static AppiumDriverLocalService service;
 

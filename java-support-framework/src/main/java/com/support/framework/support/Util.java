@@ -8,13 +8,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.URL;
 
-import static com.support.framework.support.Property.GRID_URL;
-
-public class Util {
+public final class Util {
 
     private static final Logger LOG = Logger.getLogger(Util.class);
 

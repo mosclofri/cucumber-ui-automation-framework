@@ -15,20 +15,20 @@ import static java.time.Duration.ofSeconds;
 
 @Component
 @Scope("cucumber-glue")
-public class BaseAppium extends AbstractBaseAppium implements DriverInterface<MobileElement> {
+public class AppiumBase extends AbstractAppiumBase implements DriverInterface<MobileElement> {
 
-    private static final Logger LOG = Logger.getLogger(BaseAppium.class);
+    private static final Logger LOG = Logger.getLogger(AppiumBase.class);
     private final double FIRST_MULTIPLIER = 0.80;
     private final double SECOND_MULTIPLIER = 0.20;
 
-    public BaseAppium(AppiumDriver<? extends MobileElement> driver) {
+    public AppiumBase(AppiumDriver<? extends MobileElement> driver) {
         super(driver);
+        initPageFactoryElements(this);
     }
 
     @Override
     public void initPageFactoryElements(Object object) {
-        PageFactory.initElements(
-                new AppiumFieldDecorator(getDriver()), object);
+        PageFactory.initElements(new AppiumFieldDecorator(getDriver()), object);
     }
 
     @Override

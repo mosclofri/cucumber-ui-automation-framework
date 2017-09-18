@@ -1,7 +1,6 @@
 package com.appium.framework.base;
 
 import com.support.framework.base.AbstractBase;
-import com.support.framework.support.Property;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.apache.log4j.Logger;
@@ -11,12 +10,14 @@ import org.openqa.selenium.NoSuchElementException;
 import java.util.List;
 import java.util.Set;
 
-abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
+import static com.support.framework.support.Property.PLATFORM_NAME;
 
-    private static final Logger LOG = Logger.getLogger(AbstractBaseAppium.class);
+abstract class AbstractAppiumBase extends AbstractBase<MobileElement> {
+
+    private static final Logger LOG = Logger.getLogger(AbstractAppiumBase.class);
     private AppiumDriver<? extends MobileElement> driver;
 
-    AbstractBaseAppium(AppiumDriver<? extends MobileElement> driver) {
+    AbstractAppiumBase(AppiumDriver<? extends MobileElement> driver) {
         super(driver);
         this.driver = driver;
     }
@@ -60,11 +61,11 @@ abstract class AbstractBaseAppium extends AbstractBase<MobileElement> {
     }
 
     public boolean isPlatformAndroid() {
-        return (Property.PLATFORM_NAME.toString().equalsIgnoreCase("android"));
+        return (PLATFORM_NAME.toString().equalsIgnoreCase("android"));
     }
 
     public boolean isPlatformIOS() {
-        return (Property.PLATFORM_NAME.toString().equalsIgnoreCase("ios"));
+        return (PLATFORM_NAME.toString().equalsIgnoreCase("ios"));
     }
 
     public void restartApp() {

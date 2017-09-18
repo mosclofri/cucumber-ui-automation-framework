@@ -10,12 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("cucumber-glue")
-public class BaseSelenium extends AbstractBaseSelenium implements DriverInterface<WebElement> {
+public class SeleniumBase extends AbstractSeleniumBase implements DriverInterface<WebElement> {
 
-    private static final Logger LOG = Logger.getLogger(BaseSelenium.class);
+    private static final Logger LOG = Logger.getLogger(SeleniumBase.class);
 
-    public BaseSelenium(WebDriver driver) {
+    public SeleniumBase(WebDriver driver) {
         super(driver);
+        initPageFactoryElements(this);
     }
 
     @Override

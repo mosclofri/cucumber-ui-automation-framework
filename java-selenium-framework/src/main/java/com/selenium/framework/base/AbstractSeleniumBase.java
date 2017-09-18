@@ -15,12 +15,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static com.support.framework.support.Property.BASE_URL;
 import static org.junit.Assert.assertEquals;
 
-abstract class AbstractBaseSelenium extends AbstractBase<WebElement> {
+abstract class AbstractSeleniumBase extends AbstractBase<WebElement> {
 
-    private static final Logger LOG = Logger.getLogger(AbstractBaseSelenium.class);
+    private static final Logger LOG = Logger.getLogger(AbstractSeleniumBase.class);
     private WebDriver driver;
 
-    AbstractBaseSelenium(WebDriver driver) {
+    AbstractSeleniumBase(WebDriver driver) {
         super(driver);
         this.driver = driver;
     }

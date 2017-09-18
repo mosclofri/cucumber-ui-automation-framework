@@ -74,7 +74,7 @@ class SeleniumDriverUtils {
         }
         driver.manage().deleteAllCookies();
         if (BROWSER_WIDTH != null && BROWSER_HEIGHT != null) {
-            LOG.info("Resizing browser to: " + BROWSER_WIDTH +"x"+BROWSER_HEIGHT);
+            LOG.info("Resizing browser to: " + BROWSER_WIDTH + "x" + BROWSER_HEIGHT);
             driver.manage().window().setSize(new Dimension(BROWSER_WIDTH.toInt(), BROWSER_HEIGHT.toInt()));
         }
         return driver;

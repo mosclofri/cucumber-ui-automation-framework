@@ -1,7 +1,6 @@
 package com.appium.framework.driver;
 
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
-import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -16,8 +15,6 @@ import java.nio.charset.StandardCharsets;
 
 import static com.appium.framework.core.AppiumCukes.APPIUM_PORT;
 import static com.support.framework.support.Property.*;
-import static com.support.framework.support.Property.XCODE_ORG_ID;
-import static com.support.framework.support.Property.XCODE_SIGNING_ID;
 import static io.appium.java_client.remote.AutomationName.APPIUM;
 import static io.appium.java_client.remote.AutomationName.IOS_XCUI_TEST;
 

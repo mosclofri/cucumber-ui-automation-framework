@@ -1,6 +1,6 @@
 package com.appium.framework.hook;
 
-import com.appium.framework.base.BaseAppium;
+import com.appium.framework.base.AppiumBase;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -12,11 +12,11 @@ import static com.support.framework.hook.Hooks.hookBefore;
 public class Hooks {
 
     @Autowired
-    public BaseAppium baseAppium;
+    private AppiumBase appiumBase;
 
     @After
     public void after() {
-        hookAfter(baseAppium.getDriver());
+        hookAfter(appiumBase.getDriver());
     }
 
     @Before

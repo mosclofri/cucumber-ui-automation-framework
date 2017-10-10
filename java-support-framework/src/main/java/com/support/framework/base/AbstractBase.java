@@ -1,8 +1,8 @@
 package com.support.framework.base;
 
-import cucumber.api.Scenario;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -19,7 +19,6 @@ import static org.junit.Assert.assertTrue;
 public abstract class AbstractBase<T extends WebElement> {
 
     private static final Logger LOG = Logger.getLogger(AbstractBase.class);
-    public static Scenario scenario;
     private WebDriver driver;
 
     public AbstractBase(WebDriver driver) {
@@ -75,7 +74,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             element.isDisplayed();
             return false;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return true;
         }
     }
@@ -84,7 +83,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.invisibilityOf(element));
             return false;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return true;
         }
     }
@@ -93,7 +92,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.visibilityOf(element));
             return true;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return false;
         }
     }
@@ -102,7 +101,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             element.isDisplayed();
             return true;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return false;
         }
     }
@@ -111,7 +110,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.invisibilityOfAllElements((List<WebElement>) elements));
             return false;
-        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException | TimeoutException | IndexOutOfBoundsException ignore) {
             return true;
         }
     }
@@ -120,7 +119,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.visibilityOfAllElements((List<WebElement>) elements));
             return true;
-        } catch (NoSuchElementException | IndexOutOfBoundsException ignore) {
+        } catch (NoSuchElementException | TimeoutException | IndexOutOfBoundsException ignore) {
             return false;
         }
     }
@@ -130,7 +129,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.and(expected));
             return true;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return false;
         }
     }
@@ -140,7 +139,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(ExpectedConditions.or(expected));
             return true;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return false;
         }
     }
@@ -159,7 +158,7 @@ public abstract class AbstractBase<T extends WebElement> {
         try {
             new WebDriverWait(driver, duration).until(expectation);
             return true;
-        } catch (NoSuchElementException ignore) {
+        } catch (NoSuchElementException | TimeoutException ignore) {
             return false;
         }
     }

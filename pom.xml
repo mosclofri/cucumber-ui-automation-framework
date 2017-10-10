@@ -4,7 +4,7 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-ui-automation-framework</artifactId>
-    <version>0.8.5</version>
+    <version>0.8.6</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -18,21 +18,21 @@
     </modules>
 
     <properties>
-        <appium-java-version>5.0.3</appium-java-version>
+        <appium-java-version>5.0.4</appium-java-version>
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
         <compiler-version>3.7.0</compiler-version>
-        <cucumber-version>2.0.0</cucumber-version>
+        <cucumber-version>2.0.1</cucumber-version>
         <deploy-plugin-version>2.8.2</deploy-plugin-version>
-        <drivermanager-version>1.7.1</drivermanager-version>
+        <drivermanager-version>1.7.2</drivermanager-version>
         <github-maven-version>0.12</github-maven-version>
         <github.global.server>github</github.global.server>
-        <jfairy-version>0.5.7</jfairy-version>
+        <jfairy-version>0.5.8</jfairy-version>
         <log4j-version>1.2.17</log4j-version>
-        <maven-version-plugin>2.4</maven-version-plugin>
+        <maven-version-plugin>2.5</maven-version-plugin>
         <reporting-version>3.10.0</reporting-version>
-        <selenium-java-version>3.5.3</selenium-java-version>
-        <selenium-support-version>3.5.3</selenium-support-version>
+        <selenium-java-version>3.6.0</selenium-java-version>
+        <selenium-support-version>3.6.0</selenium-support-version>
         <slf4j-api-version>1.7.5</slf4j-api-version>
         <sortpom-plugin-version>2.8.0</sortpom-plugin-version>
         <spring-version>4.3.10.RELEASE</spring-version>

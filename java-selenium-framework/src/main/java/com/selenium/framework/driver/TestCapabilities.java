@@ -16,6 +16,7 @@ import static com.support.framework.support.Property.GRID_URL;
 import static com.support.framework.support.Property.PLATFORM_NAME;
 import static com.support.framework.support.Property.SELENIUM_LOG;
 
+@Deprecated
 class TestCapabilities {
 
     private static final Logger LOG = Logger.getLogger(TestCapabilities.class);
@@ -27,6 +28,8 @@ class TestCapabilities {
         loggingPreferences = new LoggingPreferences();
         loggingPreferences.enable(LogType.BROWSER, Level.parse(SELENIUM_LOG.toString()));
         loggingPreferences.enable(LogType.DRIVER, Level.parse(SELENIUM_LOG.toString()));
+        loggingPreferences.enable(LogType.SERVER, Level.parse(SELENIUM_LOG.toString()));
+        loggingPreferences.enable(LogType.CLIENT, Level.parse(SELENIUM_LOG.toString()));
         if (PLATFORM_NAME.toString().equalsIgnoreCase("android") || PLATFORM_NAME.toString().equalsIgnoreCase("ios")) {
             return getMobileDesiredCapabilities();
         } else {
@@ -37,7 +40,6 @@ class TestCapabilities {
     private DesiredCapabilities getDesktopDesiredCapabilities() {
         LOG.info("Getting Desktop Capabilities");
         desiredCapabilities = new DesiredCapabilities();
-        desiredCapabilities.setBrowserName(BROWSER_NAME.toString());
         desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         return desiredCapabilities;
     }
@@ -49,7 +51,7 @@ class TestCapabilities {
         desiredCapabilities.setCapability("deviceName", Property.DEVICE_NAME);
         desiredCapabilities.setCapability("platformVersion", Property.PLATFORM_VERSION);
         desiredCapabilities.setCapability(CapabilityType.BROWSER_NAME, BROWSER_NAME);
-
+        desiredCapabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         if (PLATFORM_NAME.toString().equalsIgnoreCase("android") && BROWSER_NAME.toString().equalsIgnoreCase("chrome")) {
             desiredCapabilities.setCapability("bundleId", "com.android.chrome");
         }

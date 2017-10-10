@@ -1,6 +1,5 @@
 package com.support.framework.hook;
 
-import com.support.framework.base.AbstractBase;
 import com.support.framework.support.ThreadLocalMap;
 import cucumber.api.Scenario;
 import org.apache.log4j.Logger;
@@ -11,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.support.framework.base.AbstractBase.scenario;
 import static com.support.framework.support.Property.PLATFORM_NAME;
 import static com.support.framework.support.Property.TESTRAIL_URL;
+import static com.support.framework.support.Util.getCurrentScenario;
+import static com.support.framework.support.Util.setCurrentScenario;
 import static com.support.framework.support.Util.takeScreenShotAsByte;
 
 public class Hooks {
@@ -21,6 +21,7 @@ public class Hooks {
     private static final Logger LOG = Logger.getLogger(Hooks.class);
 
     public static void hookAfter(WebDriver driver) {
+        Scenario scenario = getCurrentScenario();
         LOG.info("### " + scenario.getStatus() + " ###");
         LOG.info("### Ending scenario: " + scenario.getName() + " ###");
         List<String> caseList = getScenariosStartWithCaseIds(scenario.getSourceTagNames());
@@ -38,8 +39,8 @@ public class Hooks {
     }
 
     public static void hookBefore(Scenario scenario) {
-        AbstractBase.scenario = scenario;
         LOG.info("### Starting scenario: " + scenario.getName() + " ###");
+        setCurrentScenario(scenario);
     }
 
     private static String captureLog(WebDriver driver) {

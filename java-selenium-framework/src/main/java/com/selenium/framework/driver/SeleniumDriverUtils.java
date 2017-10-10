@@ -9,12 +9,18 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.opera.OperaOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
@@ -24,6 +30,7 @@ import static com.support.framework.support.Property.BROWSER_HEIGHT;
 import static com.support.framework.support.Property.BROWSER_NAME;
 import static com.support.framework.support.Property.BROWSER_WIDTH;
 import static com.support.framework.support.Property.GRID_USE;
+import static org.junit.Assert.fail;
 
 @Component
 class SeleniumDriverUtils {
@@ -43,40 +50,36 @@ class SeleniumDriverUtils {
             switch (BROWSER_NAME.toString().toLowerCase()) {
                 case "chrome":
                     ChromeDriverManager.getInstance().setup();
-                    driver = new ChromeDriver(testCapabilities.getDesiredCapabilities());
+                    driver = new ChromeDriver(new ChromeOptions());
                     break;
                 case "firefox":
                     FirefoxDriverManager.getInstance().setup();
-                    driver = new FirefoxDriver(testCapabilities.getDesiredCapabilities());
-                    break;
-                case "safari":
-                    driver = new SafariDriver(testCapabilities.getDesiredCapabilities());
-                    break;
-                case "microsoftedge":
-                    EdgeDriverManager.getInstance().setup();
-                    driver = new EdgeDriver(testCapabilities.getDesiredCapabilities());
+                    driver = new FirefoxDriver(new FirefoxOptions());
                     break;
                 case "opera":
                     OperaDriverManager.getInstance().setup();
-                    driver = new OperaDriver(testCapabilities.getDesiredCapabilities());
+                    driver = new OperaDriver(new OperaOptions());
+                    break;
+                case "microsoftedge":
+                    EdgeDriverManager.getInstance().setup();
+                    driver = new EdgeDriver(new EdgeOptions());
                     break;
                 case "ie":
                     InternetExplorerDriverManager.getInstance().setup();
-                    driver = new InternetExplorerDriver(testCapabilities.getDesiredCapabilities());
+                    driver = new InternetExplorerDriver(new InternetExplorerOptions());
+                    break;
+                case "safari":
+                    driver = new SafariDriver(new SafariOptions());
                     break;
                 default:
-                    LOG.warn(BROWSER_NAME + " is not found in browser list");
-                    LOG.info("Initializing Chrome Driver");
-                    ChromeDriverManager.getInstance().setup();
-                    driver = new ChromeDriver(testCapabilities.getDesiredCapabilities());
+                    fail(BROWSER_NAME + " is not found in browser list");
+                    driver = null;
                     break;
             }
         }
         driver.manage().deleteAllCookies();
-        if (BROWSER_WIDTH != null && BROWSER_HEIGHT != null) {
-            LOG.info("Resizing browser to: " + BROWSER_WIDTH + "x" + BROWSER_HEIGHT);
-            driver.manage().window().setSize(new Dimension(BROWSER_WIDTH.toInt(), BROWSER_HEIGHT.toInt()));
-        }
+        LOG.info("Resizing browser to: " + BROWSER_WIDTH + "x" + BROWSER_HEIGHT);
+        driver.manage().window().setSize(new Dimension(BROWSER_WIDTH.toInt(), BROWSER_HEIGHT.toInt()));
         return driver;
     }
 }

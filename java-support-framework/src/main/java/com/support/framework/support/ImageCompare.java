@@ -1,6 +1,5 @@
 package com.support.framework.support;
 
-import com.support.framework.base.AbstractBase;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
@@ -22,6 +21,7 @@ import static com.support.framework.support.CmdLine.executeShellCommand;
 import static com.support.framework.support.Property.COMPARE_IMAGE;
 import static com.support.framework.support.Property.DEVICE_NAME;
 import static com.support.framework.support.Property.PLATFORM_NAME;
+import static com.support.framework.support.Util.getCurrentScenario;
 import static com.support.framework.support.Util.threadWait;
 import static org.junit.Assert.fail;
 
@@ -64,8 +64,6 @@ public class ImageCompare {
                 return;
             }
             LOG.info("Comparing current screen with: '" + expectedImage + "' with using given threshold value: " + errorThreshold);
-            ImageCompare imageCompare = new ImageCompare();
-
             BufferedImage imgInput1 = loadImage(screenShot.getPath());
             threadWait(0.25);
             BufferedImage imgInput2 = loadImage(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE).getAbsolutePath());
@@ -102,7 +100,7 @@ public class ImageCompare {
             int differenceThreshold = differenceCounter / width;
             if (differenceThreshold > errorThreshold) {
                 LOG.info(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
-                AbstractBase.scenario.embed(saveByteImage(imgInput1), "image/png");
+                getCurrentScenario().embed(saveByteImage(imgInput1), "image/png");
                 fail(differenceThreshold + " differences found that is greater than given threshold value: " + errorThreshold);
             }
         }

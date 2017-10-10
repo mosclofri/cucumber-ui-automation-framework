@@ -1,5 +1,6 @@
 package com.support.framework.support;
 
+import cucumber.api.Scenario;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.AssumptionViolatedException;
@@ -13,6 +14,18 @@ import java.net.ServerSocket;
 public final class Util {
 
     private static final Logger LOG = Logger.getLogger(Util.class);
+
+    public static void embedScreenshotToScenario(WebDriver driver) {
+        getCurrentScenario().embed(takeScreenShotAsByte(driver), "image/png");
+    }
+
+    public static Scenario getCurrentScenario() {
+        return ThreadLocalMap.getItem("CURRENT_SCENARIO", Scenario.class);
+    }
+
+    public static void setCurrentScenario(Scenario scenario) {
+        ThreadLocalMap.getMap().put("CURRENT_SCENARIO", scenario);
+    }
 
     public static int getPort(int currentPort) {
         if (currentPort == 0) {

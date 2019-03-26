@@ -5,8 +5,11 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import static com.support.framework.support.Property.IMPLICIT_WAIT;
 
 @Component
 @Scope("cucumber-glue")
@@ -21,7 +24,7 @@ public class SeleniumBase extends AbstractSeleniumBase implements DriverInterfac
 
     @Override
     public void initPageFactoryElements(Object object) {
-        PageFactory.initElements(getDriver(), object);
+        PageFactory.initElements(new AjaxElementLocatorFactory(getDriver(), IMPLICIT_WAIT.toInt()), object);
     }
 
     @Override

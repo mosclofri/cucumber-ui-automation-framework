@@ -4,7 +4,7 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-ui-automation-framework</artifactId>
-    <version>0.8.6</version>
+    <version>0.8.7</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -22,9 +22,9 @@
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
         <compiler-version>3.7.0</compiler-version>
-        <cucumber-version>2.0.1</cucumber-version>
+        <cucumber-version>2.4.0</cucumber-version>
         <deploy-plugin-version>2.8.2</deploy-plugin-version>
-        <drivermanager-version>1.7.2</drivermanager-version>
+        <drivermanager-version>3.3.0</drivermanager-version>
         <github-maven-version>0.12</github-maven-version>
         <github.global.server>github</github.global.server>
         <jfairy-version>0.5.8</jfairy-version>

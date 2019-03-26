@@ -4,7 +4,7 @@
 
     <groupId>com.github.mosclofri</groupId>
     <artifactId>cucumber-ui-automation-framework</artifactId>
-    <version>0.8.7</version>
+    <version>0.9.0</version>
     <packaging>pom</packaging>
 
     <prerequisites>

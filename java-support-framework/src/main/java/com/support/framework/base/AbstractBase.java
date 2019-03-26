@@ -124,6 +124,19 @@ public abstract class AbstractBase<T extends WebElement> {
         }
     }
 
+    public boolean elementClickable(T element) {
+        try {
+            new WebDriverWait(driver, IMPLICIT_WAIT.toInt()).until(ExpectedConditions.elementToBeClickable(element));
+            return true;
+        } catch (NoSuchElementException | TimeoutException ignore) {
+            return false;
+        }
+    }
+
+    public void assertElementClickable(T element) {
+        assertTrue(elementClickable(element));
+    }
+
     public boolean multipleElementsWithAnd(int duration, T... args) {
         ExpectedCondition[] expected = getExpectedConditions(args);
         try {

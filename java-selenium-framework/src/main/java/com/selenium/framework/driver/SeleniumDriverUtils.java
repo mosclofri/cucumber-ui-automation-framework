@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -37,6 +38,16 @@ class SeleniumDriverUtils {
 
     private static final Logger LOG = Logger.getLogger(SeleniumDriverUtils.class);
 
+    private static ChromeOptions headlessChromeOptions() {
+        return new ChromeOptions().addArguments("--headless");
+    }
+
+    private static FirefoxOptions headlessFirefoxOptions() {
+        FirefoxBinary binary = new FirefoxBinary();
+        binary.addCommandLineOptions("-headless");
+        return new FirefoxOptions().setBinary(binary);
+    }
+
     @Bean(destroyMethod = "quit")
     @Scope("cucumber-glue")
     @Profile("Selenium")
@@ -49,23 +60,31 @@ class SeleniumDriverUtils {
         } else {
             switch (BROWSER_NAME.toString().toLowerCase()) {
                 case "chrome":
-                    ChromeDriverManager.getInstance().setup();
+                    ChromeDriverManager.chromedriver().setup();
                     driver = new ChromeDriver(new ChromeOptions());
                     break;
+                case "chrome-headless":
+                    ChromeDriverManager.chromedriver().setup();
+                    driver = new ChromeDriver(headlessChromeOptions());
+                    break;
                 case "firefox":
-                    FirefoxDriverManager.getInstance().setup();
+                    FirefoxDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver(new FirefoxOptions());
                     break;
+                case "firefox-headless":
+                    FirefoxDriverManager.firefoxdriver().setup();
+                    driver = new FirefoxDriver(headlessFirefoxOptions());
+                    break;
                 case "opera":
-                    OperaDriverManager.getInstance().setup();
+                    OperaDriverManager.operadriver().setup();
                     driver = new OperaDriver(new OperaOptions());
                     break;
                 case "microsoftedge":
-                    EdgeDriverManager.getInstance().setup();
+                    EdgeDriverManager.edgedriver().setup();
                     driver = new EdgeDriver(new EdgeOptions());
                     break;
                 case "ie":
-                    InternetExplorerDriverManager.getInstance().setup();
+                    InternetExplorerDriverManager.iedriver().setup();
                     driver = new InternetExplorerDriver(new InternetExplorerOptions());
                     break;
                 case "safari":

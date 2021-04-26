@@ -19,7 +19,7 @@
 
     <properties>
         <appium-java-version>5.0.4</appium-java-version>
-        <commons-io-version>2.5</commons-io-version>
+        <commons-io-version>2.7</commons-io-version>
         <commons-lang3-version>3.6</commons-lang3-version>
         <compiler-version>3.7.0</compiler-version>
         <cucumber-version>2.4.0</cucumber-version>
